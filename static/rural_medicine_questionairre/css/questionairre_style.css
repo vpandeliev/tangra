@@ -1,0 +1,86 @@
+
+#injury_questions
+{
+	display:none;
+}
+
+
+table
+{
+	padding:0 100px 0 100px;
+	border-collapse:collapse;
+	table-layout: fixed;
+}
+
+td
+{
+	border:solid;
+	border-width:1px;
+	text-align:center;
+}
+
+
+th
+{
+	background:#FFFECB;
+	border:solid;
+	border-width:1px;
+	text-align:center;
+}
+
+#background_info, #references, #goals
+{
+	margin:0 100px 0 100px;
+}
+
+ul
+{
+	list-style-type:circle;
+}
+
+.the_question 
+{
+	width:100%;
+	margin:0 auto;
+	text-align:justify;
+	border:solid;
+	border-width:0 0 1px 0;
+	
+}
+
+.the_answers 
+{
+	width:700px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.rationale
+{
+  margin-top: 5px;
+	width:700px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.rationale h2 
+{
+  border: 1px dotted #C1CDCD;
+  padding: 6px 0;
+  font-size: 110%;
+}
+
+.rationale a
+{
+	text-decoration: none;
+	color: #333;
+}
+
+.question_container
+{
+	border:1px solid #C1CDCD;
+	background-color:#FaFaFa;
+	margin:0 0 20px 0;
+	padding: 10px;
+}
+

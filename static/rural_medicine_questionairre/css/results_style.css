@@ -1,0 +1,62 @@
+
+A:link {text-decoration: none; color:blue;}
+A:visited {text-decoration: none}
+A:active {text-decoration: none}
+A:hover {text-decoration: underline; color: red;}
+
+
+#background_info, #references, #goals
+{
+    margin:0 100px 0 100px;
+}
+
+ul
+{
+    list-style-type:circle;
+}
+
+.the_question 
+{
+    width:90%;
+    margin:0 auto;
+    text-align:justify;
+}
+
+.the_answers 
+{
+    width:90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#loading_box
+{
+    border:solid;
+    border-width:1px;
+    width:400px;
+    text-align:center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.intervention_box
+{
+    border:solid;
+    border-width:1px;
+    margin:10px 0 20px 0;
+    padding:10px;
+}
+
+.intervention_header
+{
+    width:100%;
+    font-weight:bold;
+}
+
+.intervention_question
+{
+    width:90%;
+    margin:0 0 0 5%;
+    padding:10px 0 10px 0;
+    text-align:center;
+}
