@@ -1,2 +1,2 @@
-tangra
+Tangra 2.0
 ======
