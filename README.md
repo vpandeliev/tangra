@@ -5,3 +5,4 @@ Before installing Tangra on your machine you must install Django-Suit. In Termin
 ```
 pip install django-suit
 ```
+(via http://django-suit.readthedocs.org/en/develop/#installation)
