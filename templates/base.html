@@ -33,7 +33,7 @@
 				<div id="login_links">
 				{% if user.is_authenticated %}
 					Welcome, <a href="/study/">{{user.username}}</a> 
-					| <a href="/accounts/logout">Logout</a>
+					| <a href="{% url 'logout' %}">Logout</a>
 				{% else %}
 					Welcome to Tangra 2.0
 				{% endif%}

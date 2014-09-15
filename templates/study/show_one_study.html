@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load staticfiles %}
+<!-- javascript includes -->
+<script src="{% static "js/video_conferencing/ajax_requests.js" %}" type="text/javascript" charset="utf-8"></script>
+
+<!-- CSS includes -->
+<link href="{% static "css/video_conferencing.css" %}" type="text/css" rel="stylesheet" >
+<link href="{% static "css/investigator/user_table.css" %}" type="text/css" rel="stylesheet" >
+<link href="{% static "css/participant/study.css" %}" type="text/css" rel="stylesheet" >
+
+
+
+<div class="hidden_data" id="ajax_response">HIDDEN!</div>
+
+<h1>{{ study.name }}</h1>
+
+<div id="supertabs">
+<ul>
+
+{% if not video_request %}
+	<li class="tablink on" id="tab1">Study Progress</li>
+{% else %}
+	<li class="tablink" id="tab1">Study Progress</li>
+{% endif %}
+
+<li class="tablink" id="tab2">About Study</li>
+
+
+{% if video_request %}
+	<li class="tablink on" id="tab3">VIDEO REQUEST</li>
+{% endif %}
+
+</ul>
+</div>
+
+<!-- tab1box is active if there is no video request -->
+{% if video_request %}
+	<div id="tab1box" class="tab" style="display:none">
+{% else %}
+	<div id="tab1box" class="tab" >
+{% endif %}
+
+
+<!-- stage_navigator
+		display subject stage and allow for selection of future or past stages
+		with CLEAR messages telling the user what's going on.
+		TODO: make the messages clear lol
+-->
+<div id="stages_nav" class="clearfix" num="{{ stages.count }}">
+	<ul>
+		{% for astage in stages %} 
+			{% if astage.status > 1	 %}
+				<li class="stage not_active future">
+					<a href="" id="stage_box_{{forloop.counter}}" onclick="return false;" class="stage_box">
+						{{ astage.stage.display }}
+						{% if astage.stage_times_total > 1 %}
+							({{ astage.stage_times_completed }} / {{ astage.stage_times_total }})
+						{% elif astage.stage_times_total < 1 %}
+							(&#8734;)
+						{% endif %}
+					</a>
+				</li>
+			{% else %}
+				  {% ifequal astage.status 1 %}
+					<li class="stage active present">
+						<a href="" id="stage_box_{{forloop.counter}}" class="stage_box">
+							{{ astage.stage.display }}
+							{% if astage.stage_times_total > 1 %}
+								({{ astage.stage_times_completed }} / {{ astage.stage_times_total }})
+							{% elif astage.stage_times_total < 1 %}
+								(&#8734;)
+							{% endif %}
+						</a>
+					</li>
+				  {% else %}
+					<li class="stage not_active past">
+						<a href="" id="stage_box_{{forloop.counter}}" class="stage_box">
+							{{ astage.stage.display }}
+							{% if astage.stage_times_total > 1 %}
+								({{ astage.stage_times_completed }} / {{ astage.stage_times_total }})
+							{% elif astage.stage_times_total < 1 %}
+								(&#8734;)
+							{% endif %}
+						</a>
+					</li>
+				  {% endifequal %}
+			{% endif %}
+		{% endfor%}
+	</ul>
+</div>
+
+<!-- Show option to complete stage if the active stage repeats infinitely -->
+{% for cur_stage in stages %}
+	{% ifequal cur_stage.status 1  %}
+		{% if cur_stage.stage_times_total < 1 %}
+			<br/>
+			<a style="color:blue" href="/study/finfsess">Click to complete this (infinite) stage</a>
+			<br/><br/>
+		{% endif %}
+	{% endifequal %}
+{% endfor %}
+
+
+<!-- 
+	stage_info_display. one subdiv active at a time, controlled by stage 
+	navigator above
+ -->
+<div id="stage_info">
+		{% for astage in stages %}  
+
+	    <div id="stage_{{forloop.counter}}" class="stage_panel"
+	      {% ifnotequal astage.status 1 %}style="display:none;"{% endifnotequal %}>
+	      <div class="stage_header">
+			<table><tr><td>
+	       <h2 class="first">Description</h2>
+
+	        {{astage.stage.instructions|safe}}
+
+	        <h2 class="stage_status">
+	        	{%ifequal astage.status 1 %}
+					{%if astage.overdue%}
+					    <span class="red">Session due: {{astage.nextdeadline|date:"d M Y"}}</span>
+				    {% else %}
+					    Session due: {{astage.nextdeadline|date:"d M Y"}}
+				    {% endif %}
+					
+				{% else %}{%ifequal astage.status 2 %}
+					Future stage: no action required.
+				{% else %}
+					<span class="green">Stage complete!</span>
+				{% endifequal %}
+				{% endifequal %}
+
+	        </h2>
+	      </td><td width="40%">
+		<div style="height:100px;padding:20px 0 0 0;">
+		{%ifequal astage.status 1 %}
+			{%if astage.overdue %}
+				<a href="{{action}}" class="actbutton red">Click Here to Start the Session</a>
+			{%else %}
+				<a href="{{action}}" class="actbutton green">Click Here to Start the Session</a>
+			{% endif %}
+		{% endifequal%}
+		
+		</div>
+		</td></tr></table>
+	    </div></div>
+	  {% endfor %}
+	  </div>
+	
+</div>
+
+
+<div id="tab2box" class="tab" style="display:none">
+	<div id="study_details">
+		<h2><a href="" onclick="return toggle_detail('d1',$(this));" class="right">Description</a></h2>
+	  	<div id="d1" style="display:none;">{{study.description|safe}}</div>
+		<h2><a href=""  onclick="return toggle_detail('d2',$(this));false;"  class="right">Informed Consent</a></h2>
+		<div id="d2"  style="display:none;">{{study.consent|safe}}</div>
+		<h2><a href="" onclick="return toggle_detail('d3',$(this));"  class="right">Instructions</a></h2>
+		<div id="d3"  style="display:none;">{{study.instructions|safe}}</div>
+		<h2><a href="" onclick="return toggle_detail('d4',$(this));"  class="right">Eligibility</a></h2>
+		<div id="d4" style="display:none;">{{study.eligibility|safe}}</div>
+		<h2><a href="" onclick="return toggle_detail('d5',$(this));"  class="right">Reward</a></h2>
+		<div id="d5" style="display:none;">{{study.reward|safe}}</div>
+	</div>
+</div>
+
+
+{% if video_request %}
+	
+	<div id="tab3box" class="tab">
+		
+		{% include 'participant_video_interface.html' %}
+		
+	</div>
+	
+{% endif %} <!-- endif video_request-->
+
+
+{% endblock %}

@@ -1,6 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+def get_current_stage(study, user):
+	"""	Returns the current Stage object for the supplied user and study. """
+	current_stages = UserStage.objects.filter(group_stage__stage__study=study, user=user, status=1)
+	if len(current_stages) > 0:
+		return current_stages[0]
+	else:
+		return None
+
 class Study(models.Model):
 	"""	A Study contains all of the general data associated with a study. """
 	name = models.CharField('Study Name', max_length=300)

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Participant -->
+{% ifnotequal current_stages|length 0 %}
+
+	<h2>Welcome to Tangra! You are a participant in the following studies:</h2>
+
+	<ul class="many_studies">
+	  {% for user_stage in current_stages %}
+	  <li>
+	    <h3>{{ user_stage.group_stage.stage.study.name }}<span class="study_status">
+				{% if user_stage.overdue %} <span class="red right_float">Overdue!</span>
+				{% else %} <span class="green right_float">Active</span>
+				{% endif %}
+		</span></h3>
+	    <table class="table_stage_info" cellspacing="0">
+	      <tr>
+	        <td class="table_label">Current stage</td>
+	        <td>{{user_stage.group_stage.stage.name}}</td>
+	      </tr>
+	      <tr>
+	        <td class="table_label">Stage Description</td>
+	        <td>{{user_stage.group_stage.stage.description|safe}}</td>
+	      </tr>
+	      <tr>
+	        <td class="table_label"></td>
+	        <td>
+	          {%if user_stage.overdue%}
+			        <span class="red">You're overdue! Last session was due: {{user_stage.nextdeadline|date:"d M Y"}}</span>
+		        {% else %}
+			        Complete session by: {{user_stage.nextdeadline|date:"d M Y"}}
+		        {% endif %}
+	        </td>
+	      </tr>
+
+
+		  <tr>
+	        <td height="80px" style="text-align:center;" colspan=2>
+				<a href="{% url 'studies:show_one_study' user_stage.group_stage.stage.study.id %}">
+			 		<span class="actbutton green" >
+						Click Here to Participate in This Study
+					</span>
+				</a>
+			</td>
+		  </tr>
+	    </table>
+	  </li>
+		<br>
+	  {% endfor %}
+	</ul>
+{% else %}
+	<h2>You have completed all of your studies. Thank you!</h2>
+{% endifnotequal %}
+
+
+ 
+{% endblock %}
