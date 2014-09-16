@@ -7,13 +7,15 @@ from django.contrib.auth.decorators import login_required
 from models import *
 
 @login_required
-def show_many_studies(request):
+def show_active_studies(request):
+	"""	Display all active stages that the user currently has. """
 	# Get all of the stages are active
 	current_stages = UserStage.objects.filter(user=request.user, status=1)
 	return render_to_response('study/show_many_studies.html', locals(), context_instance=RequestContext(request))
 
 @login_required
-def show_one_study(request, s_id):
+def show_study(request, s_id):
+	"""	Display the study with id 's_id'. """
 	study_id = int(s_id)
 	request.session['study_id'] = study_id
 	study = Study.objects.get(id=study_id)
@@ -26,4 +28,4 @@ def show_one_study(request, s_id):
 		action = current_stage.group_stage.stage.url
 		return render_to_response('study/show_one_study.html', locals(), context_instance=RequestContext(request))
 	else:
-		return HttpResponseRedirect(reverse('studies:show_many_studies'))
+		return HttpResponseRedirect(reverse('studies:active_studies'))
