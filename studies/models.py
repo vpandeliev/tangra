@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 def get_current_stage(study, user):
 	"""	Returns the current Stage object for the supplied user and study. """
@@ -85,6 +86,17 @@ class UserStage(models.Model):
 	def __unicode__(self):
 		return unicode("User: %s | Stage: %s (%s)" % 
 			(self.user, self.group_stage.stage.name, UserStage.CHOICES[self.status][1]))
+
+	def overdue(self):
+		if self.start_date is None:
+			# User has not started this stage yet
+			return False
+		if self.group_stage.stage.deadline is None:
+			# This stage runs for an infinite amount of time
+			return False
+		days_to_complete_stage = datetime.timedelta(days=self.group_stage.stage.deadline)
+		deadline_date = self.start_date + days_to_complete_stage
+		return timezone.now() > deadline_date
 
 
 class Data(models.Model):
