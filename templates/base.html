@@ -32,7 +32,7 @@
 				<a href="/"><img id="logo" src="{% static 'img/tangra_logo.png' %}"/></a>
 				<div id="login_links">
 				{% if user.is_authenticated %}
-					Welcome, <a href="/study/">{{user.username}}</a> 
+					Welcome, <a href="{% url 'studies:active_studies' %}">{{user.username}}</a> 
 					| <a href="{% url 'logout' %}">Logout</a>
 				{% else %}
 					Welcome to Tangra 2.0

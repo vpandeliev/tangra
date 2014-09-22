@@ -13,7 +13,7 @@
 
 	    	<h3>{{ user_stage.group_stage.stage.study.name }}
 	    		<span class="study_status">
-	    			{% if user_stage.overdue %} 
+	    			{% if user_stage.is_overdue %} 
 	    				<span class="red right_float">Overdue!</span>
 					{% else %} 
 						<span class="green right_float">Active</span>
@@ -33,10 +33,10 @@
 	      		<tr>
 	        		<td class="table_label"></td>
 	        		<td>
-	          			{%if user_stage.overdue%}
-			        		<span class="red">You're overdue! Last session was due: {{user_stage.next_deadline|date:"d M Y"}}</span>
+	          			{%if user_stage.is_overdue%}
+			        		<span class="red">You're overdue! Last session was due: {{user_stage.get_deadline|date:"d M Y"}}</span>
 		        		{% else %}
-			        		Complete session by: {{user_stage.nextdeadline|date:"d M Y"}}
+			        		Complete session by: {{user_stage.get_deadline|date:"d M Y"}}
 		        		{% endif %}
 	        		</td>
 	      		</tr>
