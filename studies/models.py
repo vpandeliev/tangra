@@ -38,7 +38,7 @@ class Stage(models.Model):
 	name = models.CharField('Stage Name', max_length=300)
 	description = models.CharField('Stage Description', max_length=5000)
 	instructions = models.CharField('Stage Instructions', max_length=5000)
-	deadline = models.IntegerField('Time to finish session (in days)')
+	deadline = models.IntegerField('Time to finish session (in days)', blank=True, null=True)
 	url = models.CharField('Stage URL', max_length=300)
 
 	def __unicode__(self):
@@ -65,7 +65,7 @@ class GroupStage(models.Model):
 	order = models.PositiveIntegerField()
 
 	def __unicode__(self):
-		return unicode("Group: %s | Stage: %s" % (self.group.name, self.stage.name))
+		return unicode("Group: %s | Stage: %s (%s)" % (self.group.name, self.stage.name, self.order))
 
 
 class UserStage(models.Model):
@@ -75,7 +75,7 @@ class UserStage(models.Model):
 	group_stage = models.ForeignKey(GroupStage)
 
 	CHOICES = ((0, 'Completed'), (1, 'Active'), (2, 'Future'))
-	status = models.IntegerField(max_length=1, choices=CHOICES)
+	status = models.IntegerField(max_length=1, choices=CHOICES, default=2)
 
 	# The date and time this stage can become available
 	available = models.DateTimeField(blank=True, null=True)
@@ -84,19 +84,41 @@ class UserStage(models.Model):
 	start_date = models.DateTimeField(blank=True, null=True)
 	end_date = models.DateTimeField(blank=True, null=True)
 
+
 	def __unicode__(self):
 		return unicode("User: %s | Stage: %s (%s)" % 
 			(self.user, self.group_stage.stage.name, UserStage.CHOICES[self.status][1]))
 
-	def next_deadline(self):
+
+	def get_deadline(self):
+		"""	Return the date/time of the deadline for this stage. 
+			Return None if there is no deadline for this stage.  """
+		if self.start_date is None:
+			# The stage hasn't been started yet: no deadline
+			return None
+
+		if self.group_stage.stage.deadline is None:
+			# This stage has no deadline associated with it
+			return None
+
+		# Compute the deadline for this stage
 		days_to_complete_stage = datetime.timedelta(days=self.group_stage.stage.deadline)
 		return self.start_date + days_to_complete_stage
 
-	def overdue(self):
-		if self.start_date is None:
-			# User has not started this stage yet
+
+	def is_overdue(self):
+		"""	Return True if this stage is overdue, False otherwise. """
+		deadline = self.get_deadline()
+
+		if deadline is None:
+			# No deadline has been set for this stage
 			return False
-		return timezone.now() > self.next_deadline()
+
+		if self.status == 0:
+			# The stage has already been completed
+			return False
+
+		return timezone.now() > deadline
 
 
 class Data(models.Model):

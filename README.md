@@ -1,4 +1,4 @@
-Tangra 2.0
+Tangra 3.0
 ======
 
 Before installing Tangra on your machine you must install Django-Suit. In Terminal run:
