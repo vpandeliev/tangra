@@ -1,2 +1,6 @@
 *.pyc
 *.sqlite3
+<<<<<<< HEAD
+=======
+/studies/migrations/
+>>>>>>> origin/develop
