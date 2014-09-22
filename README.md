@@ -7,3 +7,4 @@ pip install django-suit
 pip install djangorestframework
 ```
 (via http://django-suit.readthedocs.org/en/develop/#installation)
+(via http://www.django-rest-framework.org/#installation)
