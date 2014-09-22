@@ -28,7 +28,7 @@ def home(request):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect(reverse('login'))
 	else:
-		return HttpResponseRedirect(reverse('studies:show_many_studies'))
+		return HttpResponseRedirect(reverse('studies:active_studies'))
 
 
 
