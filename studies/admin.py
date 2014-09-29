@@ -21,11 +21,11 @@ class StudyAdmin(admin.ModelAdmin):
 				'classes': ('suit-tab suit-tab-general',),
 				'fields': ['name', 'description', 'consent', 
 				'instructions', 'eligibility', 'reward', 'start_date', 
-				'end_date', 'started', 'investigators',]
+				'end_date', 'investigators',]
 			}),
 	]
 	filter_horizontal = ('investigators',)
-	list_display = ('name', 'description', 'started')
+	list_display = ('name', 'description')
 	suit_form_tabs = (('general', 'General'), ('stages', 'Stages'))
 
 class GroupAdmin(admin.ModelAdmin):
