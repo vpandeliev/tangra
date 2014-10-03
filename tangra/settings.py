@@ -78,8 +78,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'studies',
+    
+    # These are for the public API
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',    
 )
 
 MIDDLEWARE_CLASSES = (
@@ -90,6 +93,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    # These are for the public API
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',    
 )
 
 ROOT_URLCONF = 'tangra.urls'
@@ -129,7 +136,23 @@ STATIC_URL = '/static/'
 # Setting for the public API.
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES' :(
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    )
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )    
 }
+
+# Setting for CORS or the API won't work!
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_HEADERS = (
+    'x-requested-with',
+    'content-type',
+    'accept',
+    'origin',
+    'authorization',
+    'x-csrftoken'
+)
