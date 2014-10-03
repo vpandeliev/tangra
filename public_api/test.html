@@ -2,10 +2,30 @@
     <head>
         <title>Public API Test Site</title>    
         <script src="jquery-2.1.1.min.js"></script>
-        
+        <style>
+            body {
+                margin:0;
+                padding:0;
+                font-family: "Comic Sans MS";
+                color:white;
+                background-color:pink;
+            }
+            
+            p {
+                margin:1em
+            }
+            
+            h1 {
+                margin:1em
+            }
+            
+            div {
+                margin:1em
+            }
+        </style>
     </head>
 
-    <h1>Tangra test website</h1>
+    <marquee behavior="alternate"><h1 style="text-align:center">Tangra test website</h1></marquee>
     
     <p>Welcome to Tangra test website. This is for testing out the data sending
     ability of the public API.</p>
@@ -14,11 +34,10 @@
         <ul>
             <li>Use only with test databases.</li>
             <li>Must have the server running at http://127.0.0.1:8000 before the test.</li>
-            <li>Restart the browser if you have entered http://127.0.0.1:8000 before hand.</li>
         </ul>
     </p>
 
-    <p>Start out by giving a credential of a user.</p>    
+    <p id="instruction">Please enter your log in info below.</p>    
     
     <div id='CredentialFormDiv'>
         <form onsubmit="return false">
@@ -29,7 +48,6 @@
     </div>
 
     <div id='DataFormDiv'>
-        <p>Then, fill in the form and try to submit the data.</p>
         <form id='DataForm' onsubmit="return false">
             Text: <input type='text' id='Data'/>
             <button id='SubmitData'>Submit</button>
@@ -53,14 +71,14 @@
                 success:function(data) { 
                     window.token=data['token'];
                     alert("You have obtained the token: " + window.token);
+                    $("#DataFormDiv").show(1000);
+                    $("#CredentialFormDiv").hide(1000);
+                    $("#instruction").html("Now type in the data to be sent over.");
                 },
                 error:function(jqXHR) {
-                    $("html").html($.parseHTML(jqXHR.responseText));
+                    alert(jqXHR.responseText);
                 }
             });
-            
-            $("#DataFormDiv").show(1000);
-            $("#CredentialFormDiv").hide(1000);
             
         });
         
@@ -82,7 +100,7 @@
                 contentType:"application/json",
                 type:"POST",
                 error:function(jqXHR) {
-                   $("html").html($.parseHTML(jqXHR.responseText));
+                   alert(jqXHR.responseText);
                 }
             });
         });
