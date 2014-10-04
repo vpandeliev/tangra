@@ -31,9 +31,9 @@ class HomeMethodTests(TestCase):
 		response = client.get(reverse('home'))
 		self.assertRedirects(
 			response, 
-			reverse('studies:show_many_studies'), 
+			reverse('studies:active_studies'), 
 			status_code=302, 
-			target_status_code=200,	# may change depending on the behaviour of show_many_studies
+			target_status_code=200,
 		)
 
 

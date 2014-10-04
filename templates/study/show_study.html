@@ -90,9 +90,9 @@
 								<div style="height:100px;padding:20px 0 0 0;">
 									{%ifequal cur_stage.status 1 %}
 										{%if cur_stage.is_overdue %}
-											<a href="{{action}}" class="actbutton red">Click Here to Start the Session</a>
+											<a href="{{cur_stage.group_stage.stage.url}}" class="actbutton red">Click Here to Start the Session</a>
 										{%else %}
-											<a href="{{action}}" class="actbutton green">Click Here to Start the Session</a>
+											<a href="{{cur_stage.group_stage.stage.url}}" class="actbutton green">Click Here to Start the Session</a>
 										{% endif %}
 									{% endifequal%}
 								</div>

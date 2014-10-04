@@ -2,14 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 import datetime
-
-def get_current_stage(study, user):
-	"""	Returns the current Stage object for the supplied user and study. """
-	current_stages = UserStage.objects.filter(group_stage__stage__study=study, user=user, status=1)
-	if len(current_stages) > 0:
-		return current_stages[0]
-	else:
-		return None
+from django.db.models import Q
 
 class Study(models.Model):
 	"""	A Study contains all of the general data associated with a study. """
@@ -22,7 +15,6 @@ class Study(models.Model):
 	
 	start_date = models.DateField('Starting date', blank=True, null=True)
 	end_date = models.DateField('End date', blank=True, null=True)
-	started = models.BooleanField('Started', default=False)
 
 	investigators = models.ManyToManyField(User, related_name='investigators')
 
@@ -119,6 +111,26 @@ class UserStage(models.Model):
 			return False
 
 		return timezone.now() > deadline
+
+
+	@staticmethod
+	def get_active_stages(user, study=None):
+		active_stages = UserStage.objects.filter(user=user, status=1)
+
+		# Studies should be started
+		start_date_exists = Q(group_stage__stage__study__start_date__isnull=False)
+		start_date_in_past = Q(group_stage__stage__study__start_date__lte=timezone.now())
+		active_stages = active_stages.filter(start_date_exists & start_date_in_past)
+
+		# Studies should not have ended
+		end_date_does_not_exist = Q(group_stage__stage__study__end_date__isnull=True)
+		end_date_is_in_future = Q(group_stage__stage__study__end_date__gt=timezone.now())
+		active_stages = active_stages.filter(end_date_does_not_exist | end_date_is_in_future)
+
+		if study is not None:
+			active_stages = active_stages.filter(group_stage__stage__study=study)
+
+		return active_stages
 
 
 class Data(models.Model):
