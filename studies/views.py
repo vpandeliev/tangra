@@ -13,6 +13,7 @@ def show_active_studies(request):
 	# (Otherwise it would display duplicate studies in the list)
 	# TODO: Instead use this to return a list of studies
 	current_stages = UserStage.get_active_stages(request.user)
+	investigator_studies = Study.objects.filter(investigators=request.user)
 	return render_to_response('study/show_active_studies.html', locals(), context_instance=RequestContext(request))
 
 @login_required

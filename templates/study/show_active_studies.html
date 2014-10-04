@@ -3,9 +3,9 @@
 {% block content %}
 
 <!-- Participant -->
-{% ifnotequal current_stages|length 0 %}
+{% if current_stages|length > 0 %}
 
-	<h2>Welcome to Tangra! You are a participant in the following studies:</h2>
+	<h2>You are a participant in the following studies:</h2>
 
 	<ul class="many_studies">
 		{% for user_stage in current_stages %}
@@ -27,24 +27,67 @@
 	        		<td>{{user_stage.group_stage.stage.name}}</td>
 	      		</tr>
 	      		<tr>
-	        		<td class="table_label">Stage Description</td>
+	        		<td class="table_label">Stage description</td>
 	        		<td>{{user_stage.group_stage.stage.description|safe}}</td>
 	      		</tr>
-	      		<tr>
-	        		<td class="table_label"></td>
-	        		<td>
-	          			{%if user_stage.is_overdue%}
-			        		<span class="red">You're overdue! Last session was due: {{user_stage.get_deadline|date:"d M Y"}}</span>
-		        		{% else %}
-			        		Complete session by: {{user_stage.get_deadline|date:"d M Y"}}
-		        		{% endif %}
-	        		</td>
-	      		</tr>
+	      		{% if user_stage.get_deadline != None %}
+	      			<tr>
+	        			<td class="table_label">Due date</td>
+	        			<td>
+	          				{% if user_stage.is_overdue %}
+			        			<span class="red">{{user_stage.get_deadline|date:"M d, Y"}}</span>
+		        			{% else %}
+			        			{{user_stage.get_deadline|date:"M d, Y"}}
+		        			{% endif %}
+	        			</td>
+	      			</tr>
+	      		{% endif %}
 		  		<tr>
 	        		<td height="80px" style="text-align:center;" colspan=2>
 						<a href="{% url 'studies:study' user_stage.group_stage.stage.study.id %}">
 			 			<span class="actbutton green" >
-							Click Here to Participate in This Study
+							Click here to participate in this study
+						</span>
+						</a>
+					</td>
+		  		</tr>
+	    	</table>
+	  	</li>
+		<br>
+	  	{% endfor %}
+	</ul>
+
+<!-- IMPORTANT NOTE: If an investigator is a part of a study, they will not be able to have access to the studies they are managing. Must fix. -->
+{% elif investigator_studies|length > 0 %}
+
+	<h2>You are an investigator for the following studies:</h2>
+
+	<ul class="many_studies">
+		{% for study in investigator_studies %}
+		<li>
+
+	    	<!--
+	    	<h3>{{ user_stage.group_stage.stage.study.name }}
+	    		<span class="study_status">
+	    			{% if user_stage.is_overdue %} 
+	    				<span class="red right_float">Overdue!</span>
+					{% else %} 
+						<span class="green right_float">Active</span>
+					{% endif %}
+				</span>
+			</h3> 
+			-->
+	    
+	    	<table class="table_stage_info" cellspacing="0">
+	    		<tr>
+	        		<td class="table_label">Study</td>
+	        		<td>{{study.name}}</td>
+	      		</tr>
+		  		<tr>
+	        		<td height="80px" style="text-align:center;" colspan=2>
+						<a href="{% url 'studies:investigator:study' study.id %}">
+			 			<span class="actbutton green" >
+							Click here to manage this study
 						</span>
 						</a>
 					</td>
@@ -59,6 +102,6 @@
 
 	<h2>You have completed all of your studies. Thank you!</h2>
 
-{% endifnotequal %}
+{% endif %}
  
 {% endblock %}
