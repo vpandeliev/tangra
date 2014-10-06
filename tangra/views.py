@@ -43,8 +43,8 @@ def login(request):
 
 	elif request.method == 'POST':
 		# TODO: Error if request doesn't have these parameters
-		username = request.POST['username']
-		password = request.POST['password']
+		username = request.POST.get('username')
+		password = request.POST.get('password')
 		user = auth.authenticate(username=username, password=password)
 
 		if user is None:

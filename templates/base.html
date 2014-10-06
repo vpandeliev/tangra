@@ -3,20 +3,57 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<meta name="description" content="">
+    	<meta name="author" content="Technologies for Aging Gracefully Lab">
+    	<link rel="icon" href="../../favicon.ico">
+
 		<title>{% block title %}{% endblock %}</title>
+
+		<!-- Bootstrap core CSS -->
+    	<link href="{% static 'dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    	<!-- Bootstrap theme -->
+    	<link href="{% static 'dist/css/bootstrap-theme.min.css' %}" rel="stylesheet">
 				
 		<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" media="screen">
 		<link rel="stylesheet" type="text/css" href="{% static "css/tabs.css" %}" media="screen">
-		
-		<script type="text/javascript" src="{% static "js/jquery-1.7.2.min.js" %}" ></script>
-		<script type="text/javascript" src="{% static "js/main.js" %}" ></script>
-		<script type="text/javascript" src="{% static "js/tabs.js" %}" ></script>
-		<script type="text/javascript" src="{% static "js/timer.js" %}" ></script>
+
+		{% block head %}{% endblock %}
 	</head>
 	
 	<body>
 
-    	<div id="modal_background" style="display:none;">
+		<!-- Fixed navbar -->
+	    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	      <div class="container">
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="{% url 'home' %}">
+	          	<img src="{% static 'img/tangra_logo.png' %}" width="110px" height="30px">
+	          </a>
+	        </div>
+	        <div class="navbar-collapse collapse">
+	          <ul class="nav navbar-nav navbar-right">
+	          	{% if user.is_authenticated %}
+            		<li><a href="{% url 'studies:active_studies' %}">{{user.username}}</a></li>
+            		<li><a href="{% url 'logout' %}">Logout</a></li>
+            	{% endif %}
+          	  </ul>
+	        </div><!--/.nav-collapse -->
+	      </div>
+	    </div>
+
+	    {% block content %}{% endblock %}
+
+    	<!--div id="modal_background" style="display:none;">
     		<div id="modal_dialog"  style="display:none;">
         		<div id="modal_body"></div>
         		<button  onclick="close_modal();"> Close </button>
@@ -39,8 +76,16 @@
 				{% endif%}
 				</div>
 			</div>
-			{% block content %}{% endblock %}
-		</div>
+		</div-->
+
+		<!-- Bootstrap core JavaScript
+    	================================================== -->
+    	<!-- Placed at the end of the document so the pages load faster -->
+    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    	<script src="{% static 'dist/js/bootstrap.min.js' %}"></script>
+    	<!--script src="../../assets/js/docs.min.js"></script-->
+    	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    	<!--script src="../../assets/js/ie10-viewport-bug-workaround.js"></script-->
 		
 	</body>
 </html>
