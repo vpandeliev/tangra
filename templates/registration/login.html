@@ -12,12 +12,14 @@
 <div class="container">
 
     {% if errors %}
-        <p class="error">{{ message }}</p>
+        <div class="alert alert-danger" role="alert">
+            <strong>Oh snap!</strong> {{message}}
+        </div>
     {% endif %}
 
     <form class="form-signin" role="form" action="{% url 'login' %}" method="POST">
         {% csrf_token %}
-        <h2 class="form-signin-heading">Please sign in</h2>
+        <h2 class="form-signin-heading">Sign in to Tangra!</h2>
         <input type="text" class="form-control" placeholder="Username" name="username" required autofocus>
         <input type="password" class="form-control" placeholder="Password" name="password" required>
         <!--label class="checkbox">
