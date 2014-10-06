@@ -57,8 +57,10 @@
 	  	{% endfor %}
 	</ul>
 
+{% endif %}
+
 <!-- IMPORTANT NOTE: If an investigator is a part of a study, they will not be able to have access to the studies they are managing. Must fix. -->
-{% elif investigator_studies|length > 0 %}
+{% if investigator_studies|length > 0 %}
 
 	<h2>You are an investigator for the following studies:</h2>
 
@@ -66,22 +68,22 @@
 		{% for study in investigator_studies %}
 		<li>
 
-	    	<!--
-	    	<h3>{{ user_stage.group_stage.stage.study.name }}
+	    	<h3>{{ study.name }}
 	    		<span class="study_status">
-	    			{% if user_stage.is_overdue %} 
-	    				<span class="red right_float">Overdue!</span>
-					{% else %} 
-						<span class="green right_float">Active</span>
+	    			{% if not study.has_started %} 
+	    				<span class="white right_float"><font color="grey">Future</font></span>
+	    			{% elif not study.has_ended %}
+	    				<span class="green right_float">Active</span>
+					{% else %}
+						<span class="white right_float">Completed</span>
 					{% endif %}
 				</span>
 			</h3> 
-			-->
 	    
 	    	<table class="table_stage_info" cellspacing="0">
 	    		<tr>
-	        		<td class="table_label">Study</td>
-	        		<td>{{study.name}}</td>
+	        		<td class="table_label">Description</td>
+	        		<td>{{study.description}}</td>
 	      		</tr>
 		  		<tr>
 	        		<td height="80px" style="text-align:center;" colspan=2>
@@ -98,7 +100,9 @@
 	  	{% endfor %}
 	</ul>
 
-{% else %}
+{% endif %}
+
+{% if current_stages|length <= 0 and investigator_studies|length <= 0 %}
 
 	<h2>You have completed all of your studies. Thank you!</h2>
 

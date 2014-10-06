@@ -13,7 +13,6 @@ def is_investigator(user, study):
 
 
 @login_required
-@user_passes_test(is_investigator)
 def show_study(request, study_id):
 	"""	Display the study with 'study_id'. """
 	study = Study.objects.get(id=study_id)

@@ -21,6 +21,18 @@ class Study(models.Model):
 	def __unicode__(self):
 		return u'%s' % (self.name)
 
+	def has_started(self):
+		if self.start_date is not None and datetime.datetime.now().date() >= self.start_date:
+			# The start date has already passed
+			return True
+		return False
+
+	def has_ended(self):
+		if self.end_date is not None and datetime.datetime.now().date() >= self.end_date:
+			# The end date has already passed
+			return True
+		return False
+
 
 class Stage(models.Model):
 	"""	A Stage contains all of the general data associated with a stage.
