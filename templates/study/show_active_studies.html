@@ -2,110 +2,128 @@
 
 {% block content %}
 
+<div class="container">
+
 <!-- Participant -->
 {% if current_stages|length > 0 %}
 
-	<h2>You are a participant in the following studies:</h2>
+	<h3>You are a participant in the following studies:</h3>
 
-	<ul class="many_studies">
-		{% for user_stage in current_stages %}
-		<li>
+	<br>
 
-	    	<h3>{{ user_stage.group_stage.stage.study.name }}
-	    		<span class="study_status">
-	    			{% if user_stage.is_overdue %} 
-	    				<span class="red right_float">Overdue!</span>
-					{% else %} 
-						<span class="green right_float">Active</span>
-					{% endif %}
+	{% for user_stage in current_stages %}
+
+		<div class="panel panel-default">
+
+			<div class="panel-heading">
+				<span style="float:right">
+					<h3 class="panel-title">
+						{% if user_stage.is_overdue %} 
+	    					<span class="label label-danger">Overdue!</span>
+						{% else %} 
+							<span class="label label-success">Active</span>
+						{% endif %}
+					</h3>
 				</span>
-			</h3>
-	    
-	    	<table class="table_stage_info" cellspacing="0">
-	    		<tr>
-	        		<td class="table_label">Current stage</td>
-	        		<td>{{user_stage.group_stage.stage.name}}</td>
-	      		</tr>
-	      		<tr>
-	        		<td class="table_label">Stage description</td>
-	        		<td>{{user_stage.group_stage.stage.description|safe}}</td>
-	      		</tr>
-	      		{% if user_stage.get_deadline != None %}
-	      			<tr>
-	        			<td class="table_label">Due date</td>
-	        			<td>
-	          				{% if user_stage.is_overdue %}
-			        			<span class="red">{{user_stage.get_deadline|date:"M d, Y"}}</span>
-		        			{% else %}
-			        			{{user_stage.get_deadline|date:"M d, Y"}}
-		        			{% endif %}
-	        			</td>
-	      			</tr>
-	      		{% endif %}
-		  		<tr>
-	        		<td height="80px" style="text-align:center;" colspan=2>
-						<a href="{% url 'studies:study' user_stage.group_stage.stage.study.id %}">
-			 			<span class="actbutton green" >
-							Click here to participate in this study
-						</span>
-						</a>
-					</td>
-		  		</tr>
-	    	</table>
-	  	</li>
-		<br>
-	  	{% endfor %}
-	</ul>
+				<h3 class="panel-title">{{ user_stage.group_stage.stage.study.name }}</h3>
+            </div>
+
+            <div class="panel-body">
+            	{{ user_stage.group_stage.stage.study.description }}
+            </div>
+        	
+        	<table class="table">
+    			<tbody>
+          			<tr>
+            			<th width="175">Current stage</th>
+            			<td>{{user_stage.group_stage.stage.name}}</td>
+          			</tr>
+          			<tr>
+            			<th>Stage description</th>
+            			<td>{{user_stage.group_stage.stage.description|safe}}</td>
+      				</tr>
+      				{% if user_stage.get_deadline != None %}
+      					<tr>
+        					<th>Due date</th>
+        					<td>{{user_stage.get_deadline|date:"M d, Y"}}</td>
+      					</tr>
+      				{% endif %}
+      				<tr>
+      					<td colspan="2">
+      						<center><a href="{% url 'studies:study' user_stage.group_stage.stage.study.id %}">
+      							<button type="button" class="btn btn-lg btn-success">Click to participate</button>
+      						</center></a>
+      					</td>
+      				</tr>
+    			</tbody>
+  			</table>
+    	</div>
+
+    	<br>
+
+	{% endfor %}
 
 {% endif %}
 
 <!-- IMPORTANT NOTE: If an investigator is a part of a study, they will not be able to have access to the studies they are managing. Must fix. -->
 {% if investigator_studies|length > 0 %}
 
-	<h2>You are an investigator for the following studies:</h2>
+	<h3>You are an investigator for the following studies:</h3>
 
-	<ul class="many_studies">
-		{% for study in investigator_studies %}
-		<li>
+	<br>
 
-	    	<h3>{{ study.name }}
-	    		<span class="study_status">
-	    			{% if not study.has_started %} 
-	    				<span class="white right_float"><font color="grey">Future</font></span>
-	    			{% elif not study.has_ended %}
-	    				<span class="green right_float">Active</span>
-					{% else %}
-						<span class="white right_float">Completed</span>
-					{% endif %}
+	{% for study in investigator_studies %}
+
+		<div class="panel panel-default">
+
+			<div class="panel-heading">
+				<span style="float:right">
+					<h3 class="panel-title">
+						{% if not study.has_started %} 
+	    					<span class="label label-info">Future</span>
+	    				{% elif not study.has_ended %}
+	    					<span class="label label-success">Active</span>
+						{% else %}
+							<span class="label label-default">Completed</span>
+						{% endif %}
+					</h3>
 				</span>
-			</h3> 
-	    
-	    	<table class="table_stage_info" cellspacing="0">
-	    		<tr>
-	        		<td class="table_label">Description</td>
-	        		<td>{{study.description}}</td>
-	      		</tr>
-		  		<tr>
-	        		<td height="80px" style="text-align:center;" colspan=2>
-						<a href="{% url 'studies:investigator:study' study.id %}">
-			 			<span class="actbutton green" >
-							Click here to manage this study
-						</span>
-						</a>
-					</td>
-		  		</tr>
-	    	</table>
-	  	</li>
-		<br>
-	  	{% endfor %}
-	</ul>
+				<h3 class="panel-title">{{ study.name }}</h3>
+            </div>
+
+            <div class="panel-body">
+            	{{ study.description }}
+            </div>
+        	
+        	<table class="table">
+    			<tbody>
+          			<tr>
+            			<th width="175">Particpants</th>
+            			<td># of participants</td>
+          			</tr>
+      				<tr>
+      					<td colspan="2">
+      						<center><a href="{% url 'studies:investigator:study' study.id %}">
+      							<button type="button" class="btn btn-lg btn-success">Click to manage</button>
+      						</center></a>
+      					</td>
+      				</tr>
+    			</tbody>
+  			</table>
+    	</div>
+
+    	<br>
+
+	{% endfor %}
 
 {% endif %}
 
 {% if current_stages|length <= 0 and investigator_studies|length <= 0 %}
 
-	<h2>You have completed all of your studies. Thank you!</h2>
+	<h3>You have completed all of your studies. Thank you!</h3>
 
 {% endif %}
+
+</div>
  
 {% endblock %}
