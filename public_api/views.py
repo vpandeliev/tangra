@@ -91,15 +91,30 @@ class PublicAPIView(APIView):
 	    Note that the data sent via POST must be a JSON and it must follow
 	    this format:
 	    - user_stage: an integer
-	    - timestamp: a datetime string following the format of YYYY-MM-DD HH:MM:SS
+	    - timestamp: a datetime string following the format of YYYY-MM-DD HH:MM:SS.
+	      It can also be "now" which uses the time when the server receives
+	      the data instead.
 	    - datum: a string, can be of any format
 	    """
 	    
+	    # Set up the date.
+	    t = request.DATA['timestamp']
+	    if t == "now":
+		t = str(timezone.now())
+	    
+	    # Get the user stage and make sure that the user is allowed to access it.
 	    us = UserStage.objects.get(id=int(request.DATA["user_stage"]))
+
+	    if us.user != request.user:
+		raise Exception("The request's user and the user stage's user do not match.")
+	    
+	    # Finally create a new data.
 	    new_data = Data.objects.create(user=request.user,
-	                                   timestamp=request.DATA['timestamp'],
+	                                   timestamp=t,
 	                                   user_stage=us,
 	                                   datum=request.DATA['datum'])
+	    
+	    # Return the JSON string message.
 	    return Response({"success" : "Data successfully added"}, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error" : str(e)}, status=status.HTTP_400_BAD_REQUEST)
