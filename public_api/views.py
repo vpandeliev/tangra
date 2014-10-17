@@ -70,7 +70,6 @@ class PublicAPIView(APIView):
 	except Exception as e:
 	    return Response({"error" : str(e)}, status=status.HTTP_400_BAD_REQUEST) 
 
-    
     def post(self, request, format=None):
         """
         Support the POST method in the API. Currently it allows for a piece
@@ -98,9 +97,11 @@ class PublicAPIView(APIView):
 	    """
 	    
 	    # Set up the date.
-	    t = request.DATA['timestamp']
-	    if t == "now":
-		t = str(timezone.now())
+	    
+	    t = str(timezone.now())
+	    if request.DATA.has_key("timestamp"):
+		if request.DATA["timestamp"] != "now":
+		    t = request.DATA["timestamp"]
 	    
 	    # Get the user stage and make sure that the user is allowed to access it.
 	    us = UserStage.objects.get(id=int(request.DATA["user_stage"]))

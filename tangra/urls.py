@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 from django.contrib import admin
-
+from django.views.decorators.csrf import csrf_exempt
 from tangra.views import *
 
 # Import for the API
