@@ -12,7 +12,7 @@ class Study(models.Model):
 	instructions = models.CharField('Study Instructions', max_length=5000)
 	eligibility = models.CharField('Eligibility Criteria', max_length=5000)
 	reward = models.CharField('Compensation and Reward', max_length=5000)
-	
+
 	start_date = models.DateField('Starting date', blank=True, null=True)
 	end_date = models.DateField('End date', blank=True, null=True)
 
@@ -51,7 +51,7 @@ class Stage(models.Model):
 
 class Group(models.Model):
 	"""	A Group contains a list of users contained within the group. It also
-	has a list of stages (stored as GroupStage entries) that the users of 
+	has a list of stages (stored as GroupStage entries) that the users of
 	the group will have to complete. """
 	name = models.CharField('Group name', max_length=300)
 	study = models.ForeignKey(Study)
@@ -73,7 +73,7 @@ class GroupStage(models.Model):
 
 
 class UserStage(models.Model):
-	"""	A UserStage contains additional Stage data specific to an individual 
+	"""	A UserStage contains additional Stage data specific to an individual
 	participant. """
 	user = models.ForeignKey(User)
 	group_stage = models.ForeignKey(GroupStage)
@@ -90,12 +90,12 @@ class UserStage(models.Model):
 
 
 	def __unicode__(self):
-		return unicode("User: %s | Stage: %s (%s)" % 
+		return unicode("User: %s | Stage: %s (%s)" %
 			(self.user, self.group_stage.stage.name, UserStage.CHOICES[self.status][1]))
 
 
 	def get_deadline(self):
-		"""	Return the date/time of the deadline for this stage. 
+		"""	Return the date/time of the deadline for this stage.
 			Return None if there is no deadline for this stage.  """
 		if self.start_date is None:
 			# The stage hasn't been started yet: no deadline

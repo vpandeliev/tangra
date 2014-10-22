@@ -50,13 +50,13 @@ SUIT_CONFIG = {
     'MENU': (
         # Reorder app models
         {
-        'app': 'studies', 
+        'app': 'studies',
         'models': (
             {'model':'auth.user', 'label':'Participants'},
-            {'model':'studies.study', 'label':'Studies'}, 
-            'group', 
+            {'model':'studies.study', 'label':'Studies'},
+            'group',
             'userstage'
-            ), 
+            ),
         'icon':'icon-leaf'
         },
         # Separator
