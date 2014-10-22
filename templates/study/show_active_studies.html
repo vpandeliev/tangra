@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% block title %}Studies{% endblock %}
+
 {% block content %}
 
 <div class="container">
@@ -7,7 +9,7 @@
 <!-- Participant -->
 {% if current_stages|length > 0 %}
 
-	<h3>You are a participant in the following studies:</h3>
+	<h3>You are a participant for the following studies:</h3>
 
 	<br>
 
@@ -18,54 +20,55 @@
 			<div class="panel-heading">
 				<span style="float:right">
 					<h3 class="panel-title">
-						{% if user_stage.is_overdue %} 
-	    					<span class="label label-danger">Overdue!</span>
-						{% else %} 
+						{% if user_stage.is_overdue %}
+	    				<span class="label label-danger">Overdue!</span>
+						{% else %}
 							<span class="label label-success">Active</span>
 						{% endif %}
 					</h3>
 				</span>
 				<h3 class="panel-title">{{ user_stage.group_stage.stage.study.name }}</h3>
-            </div>
+      </div>
 
-            <div class="panel-body">
-            	{{ user_stage.group_stage.stage.study.description }}
-            </div>
-        	
-        	<table class="table">
-    			<tbody>
-          			<tr>
-            			<th width="175">Current stage</th>
-            			<td>{{user_stage.group_stage.stage.name}}</td>
-          			</tr>
-          			<tr>
-            			<th>Stage description</th>
-            			<td>{{user_stage.group_stage.stage.description|safe}}</td>
-      				</tr>
-      				{% if user_stage.get_deadline != None %}
-      					<tr>
-        					<th>Due date</th>
-        					<td>{{user_stage.get_deadline|date:"M d, Y"}}</td>
-      					</tr>
-      				{% endif %}
-      				<tr>
-      					<td colspan="2">
-      						<center><a href="{% url 'studies:study' user_stage.group_stage.stage.study.id %}">
-      							<button type="button" class="btn btn-lg btn-success">Click to participate</button>
-      						</center></a>
-      					</td>
-      				</tr>
-    			</tbody>
-  			</table>
-    	</div>
+      <div class="panel-body">
+        {{ user_stage.group_stage.stage.study.description }}
+      </div>
 
-    	<br>
+      <table class="table">
+    		<tbody>
+          <tr>
+            <th width="175">Current stage</th>
+            <td>{{user_stage.group_stage.stage.name}}</td>
+          </tr>
+        	<tr>
+            <th>Stage description</th>
+            <td>{{user_stage.group_stage.stage.description|safe}}</td>
+      		</tr>
+      		{% if user_stage.get_deadline != None %}
+      			<tr>
+        			<th>Due date</th>
+        			<td>{{user_stage.get_deadline|date:"M d, Y"}}</td>
+      			</tr>
+      		{% endif %}
+      		<tr>
+      			<td colspan="2">
+      				<center>
+								<a href="{% url 'studies:study' user_stage.group_stage.stage.study.id %}">
+      						<button type="button" class="btn btn-lg btn-success">Click to participate</button>
+      					</a>
+							</center>
+      			</td>
+      		</tr>
+    		</tbody>
+  		</table>
+    </div>
+
+  	<br>
 
 	{% endfor %}
 
 {% endif %}
 
-<!-- IMPORTANT NOTE: If an investigator is a part of a study, they will not be able to have access to the studies they are managing. Must fix. -->
 {% if investigator_studies|length > 0 %}
 
 	<h3>You are an investigator for the following studies:</h3>
@@ -79,40 +82,42 @@
 			<div class="panel-heading">
 				<span style="float:right">
 					<h3 class="panel-title">
-						{% if not study.has_started %} 
-	    					<span class="label label-info">Future</span>
-	    				{% elif not study.has_ended %}
-	    					<span class="label label-success">Active</span>
+						{% if not study.has_started %}
+	    				<span class="label label-info">Future</span>
+	    			{% elif not study.has_ended %}
+	    				<span class="label label-success">Active</span>
 						{% else %}
 							<span class="label label-default">Completed</span>
 						{% endif %}
 					</h3>
 				</span>
 				<h3 class="panel-title">{{ study.name }}</h3>
-            </div>
+      </div>
 
-            <div class="panel-body">
-            	{{ study.description }}
-            </div>
-        	
-        	<table class="table">
-    			<tbody>
-          			<tr>
-            			<th width="175">Particpants</th>
-            			<td># of participants</td>
-          			</tr>
-      				<tr>
-      					<td colspan="2">
-      						<center><a href="{% url 'studies:investigator:study' study.id %}">
-      							<button type="button" class="btn btn-lg btn-success">Click to manage</button>
-      						</center></a>
-      					</td>
-      				</tr>
-    			</tbody>
-  			</table>
-    	</div>
+      <div class="panel-body">
+        {{ study.description }}
+      </div>
 
-    	<br>
+      <table class="table">
+    		<tbody>
+        	<tr>
+						<th width="175">Particpants</th>
+						<td># of participants</td>
+          </tr>
+      		<tr>
+      			<td colspan="2">
+      				<center>
+								<a href="{% url 'studies:investigator:study' study.id %}">
+      						<button type="button" class="btn btn-lg btn-success">Click to manage</button>
+      					</a>
+							</center>
+      			</td>
+      		</tr>
+    		</tbody>
+  		</table>
+    </div>
+
+    <br>
 
 	{% endfor %}
 
@@ -125,5 +130,5 @@
 {% endif %}
 
 </div>
- 
+
 {% endblock %}

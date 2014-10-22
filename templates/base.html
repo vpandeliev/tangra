@@ -10,21 +10,21 @@
     	<meta name="author" content="Technologies for Aging Gracefully Lab">
     	<link rel="icon" href="../../favicon.ico">
 
-		<title>{% block title %}{% endblock %}</title>
+		<title>{% block title %}{% endblock %} - Tangra</title>
 
 		<!-- Bootstrap core CSS -->
     	<link href="{% static 'dist/css/bootstrap.min.css' %}" rel="stylesheet">
 
     	<!-- Bootstrap theme -->
     	<link href="{% static 'dist/css/bootstrap-theme.min.css' %}" rel="stylesheet">
-				
+
 		<link rel="stylesheet" type="text/css" href="{% static "css/base.css" %}" media="screen">
 		<link rel="stylesheet" type="text/css" href="{% static "css/tabs.css" %}" media="screen">
 
 		<!-- Pages can import new stylesheets / scripts here -->
 		{% block head %}{% endblock %}
 	</head>
-	
+
 	<body>
 
 		<!-- Fixed navbar -->
@@ -62,6 +62,6 @@
     	<!--script src="../../assets/js/docs.min.js"></script-->
     	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     	<!--script src="../../assets/js/ie10-viewport-bug-workaround.js"></script-->
-		
+
 	</body>
 </html>
