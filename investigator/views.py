@@ -48,4 +48,4 @@ def show_study(request, study_id):
 			# calculate the progress
 			completed = UserStage.objects.filter(user=p, group_stage__group=group, status=0).count()
 			progress[p.id] = (int) ((completed / total) * 100)
-	return render_to_response('investigator/dashboard.html', locals(), context_instance=RequestContext(request))
+	return render_to_response('investigator/overview.html', locals(), context_instance=RequestContext(request))

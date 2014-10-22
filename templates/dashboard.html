@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+  {% load staticfiles %}
+  <link href="{% static 'css/investigator/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-sm-3 col-md-2 sidebar">
+      {% block nav %}{% endblock %}
+      <ul class="nav nav-sidebar">
+        <li><a href="">Email participants</a></li>
+        <li><a href="">Help / Support</a></li>
+      </ul>
+    </div>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+      <h1 class="page-header">{% block page-title %}{% endblock %}</h1>
+      {% block page-content %}{% endblock %}
+    </div>
+    
+  </div>
+</div>
+
+{% endblock %}
