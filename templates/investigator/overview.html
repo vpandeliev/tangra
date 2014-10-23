@@ -14,18 +14,9 @@
   <li><a href="#">Analytics</a></li>
   <li><a href="#">Export</a></li>
 </ul>
-<ul class="nav nav-sidebar">
-  <li><a href="">All Participants</a></li>
-  <li><a href="">Kennedy Lodge</a></li>
-  <li><a href="">Kennedy Lodge (Family)</a></li>
-  <li><a href="">Kensington Health</a></li>
-  <li><a href="">Kensington (Family)</a></li>
-  <li><a href="">Leaside</a></li>
-  <li><a href="">Leaside (Family)</a></li>
-</ul>
 {% endblock %}
 
-{% block page-title %}Dashboard{% endblock %}
+{% block page-title %}Dashboard: {{study.name}}{% endblock %}
 
 {% block page-content %}
 
@@ -59,7 +50,13 @@
 
 <!-- USER OVERVIEWS -->
 {% for group in groups %}
-<h2 class="sub-header">{{group.name}}</h2>
+<h2 class="sub-header">
+  {{group.name}}
+  <button type="button" class="btn btn-default" style="margin-right:10px; float:right">
+    <span class="glyphicon glyphicon-envelope"></span>
+    Email Group
+  </button>
+</h2>
 <div class="table-responsive">
   <table class="table table-striped">
     <thead>
@@ -74,7 +71,11 @@
       {% for participant in group.users.all %}
       <tr>
         <td>{{participant.id}}</td>
-        <td>{{participant.username}}</td>
+        <td>
+          <a href="{% url 'studies:investigator:user' study_id participant.id %}">
+            {{participant.username}}
+          </a>
+        </td>
         <td>{{stage_names|get_item:participant.id}}</td>
         <td>
           <div class="progress" style="margin-bottom:0px">

@@ -19,8 +19,8 @@ class StudyAdmin(admin.ModelAdmin):
 	fieldsets = [
 		(None, {
 				'classes': ('suit-tab suit-tab-general',),
-				'fields': ['name', 'description', 'consent', 
-				'instructions', 'eligibility', 'reward', 'start_date', 
+				'fields': ['name', 'description', 'consent',
+				'instructions', 'eligibility', 'reward', 'start_date',
 				'end_date', 'investigators',]
 			}),
 	]
@@ -46,3 +46,4 @@ class UserStageAdmin(admin.ModelAdmin):
 admin.site.register(Study, StudyAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(UserStage, UserStageAdmin)
+admin.site.register(Data)

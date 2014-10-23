@@ -1,0 +1,103 @@
+{% extends 'dashboard.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+  {% load staticfiles %}
+  <link href="{% static 'css/investigator/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block nav %}
+<ul class="nav nav-sidebar">
+  <li><a href="{% url 'studies:investigator:study' study_id %}">Overview</a></li>
+  <li><a href="#">Reports</a></li>
+  <li><a href="#">Analytics</a></li>
+  <li><a href="#">Export</a></li>
+</ul>
+<hr>
+<ul class="nav nav-sidebar">
+  {% for stage in stages %}
+    <li {% if user_stage.id = stage.id %}class="active"{% endif %}>
+      <a href="{% url 'studies:investigator:user_stage' study_id user_id stage.group_stage.order %}">
+        {{stage.group_stage.order}}:
+        {{stage.group_stage.stage.name|capfirst}}
+        {% if stage.is_overdue %}
+          <span class="label label-danger" style="float:right">Overdue!</span>
+        {% elif stage.status = 0 %}
+          <span class="label label-default" style="float:right">Done</span>
+        {% elif stage.status = 1 %}
+          <span class="label label-success" style="float:right">Active</span>
+        {% elif stage.status = 2 %}
+          <span class="label label-default" style="float:right">Future</span>
+        {% endif %}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
+
+{% block page-title %}
+{{participant.username|capfirst}}
+<button type="button" class="btn btn-default" style="margin-right:10px; float:right">
+  <span class="glyphicon glyphicon-envelope"></span>
+  Email {{participant.username|capfirst}}
+</button>
+{% endblock %}
+
+{% block page-content %}
+
+<!-- USER PROFILE -->
+User information goes here! Blah blah blah!!!!!!!
+<br><br>
+<!-- END USER PROFILE -->
+
+<h2>Stage {{stage_number}}: {{user_stage.group_stage.stage.name}}</h2>
+{{user_stage.group_stage.stage.description}}
+<hr>
+
+<!-- BUTTONS -->
+<button type="button" class="btn btn-default" style="margin-right:10px">
+  <span class="glyphicon glyphicon-edit"></span> Add Note
+</button>
+
+<button type="button" class="btn btn-default" style="margin-right:10px">
+  <span class="glyphicon glyphicon-paperclip"></span> Add File
+</button>
+
+<button type="button" class="btn btn-default">
+  <span class="glyphicon glyphicon-floppy-disk"></span> Add Data
+</button>
+<!-- END BUTTONS -->
+
+<br><br>
+
+<!-- NOTES -->
+<!-- END NOTES -->
+
+<!-- FILES -->
+<!-- END FILES -->
+
+<!-- DATA -->
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Author</th>
+        <th>Date</th>
+        <th>Datum</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for d in data %}
+      <tr>
+        <td>{{d.user|capfirst}}</td>
+        <td>{{d.timestamp}}</td>
+        <td>{{d.datum}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<!-- END DATA -->
+
+{% endblock %}

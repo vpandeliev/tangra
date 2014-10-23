@@ -44,7 +44,7 @@
 	        <div class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav navbar-right">
 	          	{% if user.is_authenticated %}
-            		<li><a href="{% url 'studies:active_studies' %}">{{user.username}}</a></li>
+            		<li><a href="{% url 'studies:active_studies' %}">{{user.username|capfirst}}</a></li>
             		<li><a href="{% url 'logout' %}">Logout</a></li>
             	{% endif %}
           	  </ul>
