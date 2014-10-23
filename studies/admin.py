@@ -46,3 +46,4 @@ class UserStageAdmin(admin.ModelAdmin):
 admin.site.register(Study, StudyAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(UserStage, UserStageAdmin)
+admin.site.register(Data)
