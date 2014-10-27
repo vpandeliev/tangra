@@ -92,5 +92,6 @@ def user_stage(request, study_id, user_id, stage_number):
 	user_stage = UserStage.objects.get(user=participant, group_stage__order=stage_number, group_stage__stage__study=study)
 	data = Data.objects.filter(user_stage=user_stage).order_by("timestamp")
 	stages = UserStage.objects.filter(user=participant, group_stage__stage__study=study).order_by("group_stage__order")
+	hide_title=True
 
 	return render_to_response('investigator/data.html', locals(), context_instance=RequestContext(request))

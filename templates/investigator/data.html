@@ -37,21 +37,30 @@
 {% endblock %}
 
 {% block page-title %}
-{{participant.username|capfirst}}
-<button type="button" class="btn btn-default" style="margin-right:10px; float:right">
-  <span class="glyphicon glyphicon-envelope"></span>
-  Email {{participant.username|capfirst}}
-</button>
+
 {% endblock %}
+
+
 
 {% block page-content %}
 
-<!-- USER PROFILE -->
-User information goes here! Blah blah blah!!!!!!!
-<br><br>
-<!-- END USER PROFILE -->
+<div class="panel panel-default">
+  <div class="panel-body">
+    <h1 class="page-header">
+      {{participant.username|capfirst}}
+      <button type="button" class="btn btn-default" style="margin-right:10px; float:right">
+        <span class="glyphicon glyphicon-envelope"></span>
+        Email {{participant.username|capfirst}}
+      </button>
+    </h1>
+    <!-- USER PROFILE -->
+    User information goes here! Blah blah blah!!!!!!!
+    <br><br>
+    <!-- END USER PROFILE -->
+  </div>
+</div>
 
-<h2>Stage {{stage_number}}: {{user_stage.group_stage.stage.name}}</h2>
+<h2 style="margin-top:30px">Stage {{stage_number}}: {{user_stage.group_stage.stage.name}}</h2>
 {{user_stage.group_stage.stage.description}}
 <hr>
 
@@ -78,6 +87,7 @@ User information goes here! Blah blah blah!!!!!!!
 <!-- END FILES -->
 
 <!-- DATA -->
+{% if data|length > 0 %}
 <div class="table-responsive">
   <table class="table table-striped">
     <thead>
@@ -98,6 +108,7 @@ User information goes here! Blah blah blah!!!!!!!
     </tbody>
   </table>
 </div>
+{% endif %}
 <!-- END DATA -->
 
 {% endblock %}
