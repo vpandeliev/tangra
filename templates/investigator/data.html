@@ -10,9 +10,7 @@
 {% block nav %}
 <ul class="nav nav-sidebar">
   <li><a href="{% url 'studies:investigator:study' study_id %}">Overview</a></li>
-  <li><a href="#">Reports</a></li>
-  <li><a href="#">Analytics</a></li>
-  <li><a href="#">Export</a></li>
+  <li><a href="#">Export Data</a></li>
 </ul>
 <hr>
 <ul class="nav nav-sidebar">
@@ -28,7 +26,7 @@
         {% elif stage.status = 1 %}
           <span class="label label-success" style="float:right">Active</span>
         {% elif stage.status = 2 %}
-          <span class="label label-default" style="float:right">Future</span>
+          <span class="label label-info" style="float:right">Future</span>
         {% endif %}
       </a>
     </li>
@@ -47,6 +45,11 @@
 <div class="panel panel-default">
   <div class="panel-body">
     <h1 class="page-header">
+      {% if participant.gender = 0 %}
+        <img src="{% static 'img/female.png' %}" height="45px">
+      {% elif participant.gender = 1 %}
+        <img src="{% static 'img/male.png' %}" height="45px">
+      {% endif %}
       {{participant.username|capfirst}}
       <button type="button" class="btn btn-default" style="margin-right:10px; float:right">
         <span class="glyphicon glyphicon-envelope"></span>
@@ -54,9 +57,10 @@
       </button>
     </h1>
     <!-- USER PROFILE -->
-    <b>Age:</b> {{ participant.age }}<br>
-    <b>Gender:</b> {{ gender_choices|get_item:participant.gender }}
-    <br><br>
+    <h4>
+      <b>Age:</b> {{ participant.age }}<br>
+      <b>Gender:</b> {{ gender_choices|get_item:participant.gender }}
+    </h4>
     <!-- END USER PROFILE -->
   </div>
 </div>

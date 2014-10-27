@@ -36,6 +36,9 @@ def show_study(request, study_id):
 	# TODO: display the investigator view for a study
 	groups = Group.objects.filter(study=study)
 
+	# Genders
+	gender_choices = {0: 'Female', 1: 'Male', 2: 'Other'}
+
 	stage_names = {}
 	progress = {}
 	for group in groups:
