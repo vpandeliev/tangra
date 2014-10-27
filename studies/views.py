@@ -30,7 +30,7 @@ def show_study(request, s_id):
 
 	if len(UserStage.get_active_stages(request.user, study)) > 0:
 		# There are active stages associated with this study
-		return render_to_response('study/show_study.html', locals(), context_instance=RequestContext(request))
+		return render_to_response('study/old_show_study.html', locals(), context_instance=RequestContext(request))
 	else:
 		# There are no available actions to do within this study
 		return HttpResponseRedirect(reverse('studies:active_studies'))

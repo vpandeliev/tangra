@@ -1,0 +1,46 @@
+{% load staticfiles %}
+
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>{% block title %}{% endblock %}</title>
+
+		<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" media="screen">
+		<link rel="stylesheet" type="text/css" href="{% static "css/tabs.css" %}" media="screen">
+
+		<script type="text/javascript" src="{% static "js/jquery-1.7.2.min.js" %}" ></script>
+		<script type="text/javascript" src="{% static "js/main.js" %}" ></script>
+		<script type="text/javascript" src="{% static "js/tabs.js" %}" ></script>
+		<script type="text/javascript" src="{% static "js/timer.js" %}" ></script>
+	</head>
+
+	<body>
+
+    	<div id="modal_background" style="display:none;">
+    		<div id="modal_dialog"  style="display:none;">
+        		<div id="modal_body"></div>
+        		<button  onclick="close_modal();"> Close </button>
+        		<div class="clear"></div>
+      		</div>
+      		{% if user.is_authenticated %}
+      			{% include "old_messages.html" %}
+			{% endif%}
+    	</div>
+
+		<div id="outer">
+			<div id="login_menu" class="supergrey">
+				<a href="/"><img id="logo" src="{% static 'img/tangra_logo.png' %}"/></a>
+				<div id="login_links">
+				{% if user.is_authenticated %}
+					Welcome, <a href="{% url 'studies:active_studies' %}">{{user.username}}</a>
+					| <a href="{% url 'logout' %}">Logout</a>
+				{% else %}
+					Welcome to Tangra 2.0
+				{% endif%}
+				</div>
+			</div>
+			{% block content %}{% endblock %}
+		</div>
+
+	</body>
+</html>
