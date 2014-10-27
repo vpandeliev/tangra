@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from studies.models import *
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from custom_auth.models import User
 from django.template.defaulttags import register
 
 
@@ -89,6 +90,7 @@ def user_stage(request, study_id, user_id, stage_number):
 		return HttpResponseRedirect(reverse('studies:active_studies'))
 
 	participant = User.objects.get(id=user_id)
+	gender_choices = {0: 'Female', 1: 'Male', 2: 'Other'}
 	user_stage = UserStage.objects.get(user=participant, group_stage__order=stage_number, group_stage__stage__study=study)
 	data = Data.objects.filter(user_stage=user_stage).order_by("timestamp")
 	stages = UserStage.objects.filter(user=participant, group_stage__stage__study=study).order_by("group_stage__order")

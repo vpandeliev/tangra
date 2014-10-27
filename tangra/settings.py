@@ -42,7 +42,7 @@ STATICFILES_DIRS = (
 
 LOGIN_URL = '/admin'
 
-AUTH_USER_MODEL = 'custom_auth.MyUser'
+AUTH_USER_MODEL = 'custom_auth.User'
 
 
 SUIT_CONFIG = {

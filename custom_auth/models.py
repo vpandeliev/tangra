@@ -5,7 +5,7 @@ from django.contrib.auth.models import (
 
 class MyUserManager(BaseUserManager):
 
-    def create_user(self, username, email, date_of_birth, password=None):
+    def create_user(self, username, email, password=None):
         """ Creates and saves a User with the given email, date of birth,
             and password. """
 
@@ -18,14 +18,13 @@ class MyUserManager(BaseUserManager):
         user = self.model(
             username = username,
             email = MyUserManager.normalize_email(email),
-            date_of_birth = date_of_birth,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, date_of_birth, password):
+    def create_superuser(self, username, email, password):
         """ Creates and saves a superuser with the given email, date of birth,
             and password. """
 
@@ -33,7 +32,6 @@ class MyUserManager(BaseUserManager):
             username,
             email,
             password=password,
-            date_of_birth=date_of_birth
         )
 
         u.is_admin=True
@@ -42,28 +40,32 @@ class MyUserManager(BaseUserManager):
 
 
 
-class MyUser(AbstractBaseUser):
+class User(AbstractBaseUser):
     username = models.CharField(max_length=20, unique=True)
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
         unique=True,
     )
-    date_of_birth = models.DateField()
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=True)
+
+    # Custom fields go here
+    age = models.IntegerField(max_length=3, default=0)
+    GENDER_CHOICES = ((0, 'Female'), (1, 'Male'), (2, 'Other'))
+    gender = models.IntegerField(max_length=1, choices=GENDER_CHOICES, default=2)
 
     objects = MyUserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['date_of_birth', 'email']
+    REQUIRED_FIELDS = ['email']
 
     def get_full_name(self):
-        # The user is identified by their email address
-        return self.email
+        # The user is identified by their username
+        return self.username
 
     def get_short_name(self):
-        # The user is identified by their email address
+        # The user is identified by their username
         return self.username
 
     def __unicode__(self):
