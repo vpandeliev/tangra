@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from django.conf import settings
 from django.utils import timezone
 import datetime
 from django.db.models import Q
@@ -16,7 +17,7 @@ class Study(models.Model):
 	start_date = models.DateField('Starting date', blank=True, null=True)
 	end_date = models.DateField('End date', blank=True, null=True)
 
-	investigators = models.ManyToManyField(User, related_name='investigators')
+	investigators = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='investigators')
 
 	def __unicode__(self):
 		return u'%s' % (self.name)
@@ -55,7 +56,7 @@ class Group(models.Model):
 	the group will have to complete. """
 	name = models.CharField('Group name', max_length=300)
 	study = models.ForeignKey(Study)
-	users = models.ManyToManyField(User, related_name='users')
+	users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='users')
 	stages = models.ManyToManyField(Stage, through='GroupStage')
 
 	def __unicode__(self):
@@ -75,7 +76,7 @@ class GroupStage(models.Model):
 class UserStage(models.Model):
 	"""	A UserStage contains additional Stage data specific to an individual
 	participant. """
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL)
 	group_stage = models.ForeignKey(GroupStage)
 
 	CHOICES = ((0, 'Completed'), (1, 'Active'), (2, 'Future'))
@@ -147,7 +148,7 @@ class UserStage(models.Model):
 
 class Data(models.Model):
 	"""	Data contains all of the data collected from the Study. """
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL)
 	user_stage = models.ForeignKey(UserStage)
 	timestamp = models.DateTimeField()
 	datum = models.TextField()

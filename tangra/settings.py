@@ -42,6 +42,8 @@ STATICFILES_DIRS = (
 
 LOGIN_URL = '/admin'
 
+AUTH_USER_MODEL = 'custom_auth.MyUser'
+
 
 SUIT_CONFIG = {
     'ADMIN_NAME': 'Tangra',
@@ -78,6 +80,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'studies',
+    'custom_auth',
 
     # These are for the public API
     'rest_framework',
