@@ -23,8 +23,9 @@
 			{% else %}
 				<!-- Past stage -->
 				<a type="button" class="btn btn-default" style="color:#AAAAAA" href="{% url 'studies:stage' study.id stage.group_stage.order %}">
+				<span class="glyphicon glyphicon-ok"></span>
 			{% endif %}
-			{{stage.group_stage.order}}. {{stage.group_stage.stage.name}}
+			{{stage.group_stage.stage.name}}
 			</a>
 		</div>
 		{% endfor %}
@@ -41,19 +42,19 @@
 	<div class="jumbotron">
 
 		<h1 style="font-size:50px">{{cur_stage.group_stage.stage.name}}</h1>
-		<p>{{cur_stage.group_stage.stage.description}}</p>
+		<p>{{cur_stage.group_stage.stage.description|safe}}</p>
 		<br>
 		<p><b>Due Date:</b> {{cur_stage.get_deadline}}</p>
 		<a href="{{cur_stage.group_stage.stage.url}}/{{cur_stage.id}}">
 		{% if cur_stage.status > 1 %}
 			<!-- Future stage -->
-			<button type="button" class="btn btn-lg btn-success" disabled>Future stage</button>
+			<button type="button" class="btn btn-lg btn-default" disabled>Future stage</button>
 		{% elif cur_stage.status == 1 %}
 			<!-- Active stage -->
 			<button type="button" class="btn btn-lg btn-success">Click to start session</button>
 		{% else %}
 			<!-- Past stage -->
-			<button type="button" class="btn btn-lg btn-success" disabled>Completed stage</button>
+			<button type="button" class="btn btn-lg btn-default" disabled>Completed stage</button>
 		{% endif %}
 		</a>
 	</div>
