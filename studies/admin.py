@@ -2,6 +2,7 @@ from django.contrib import admin
 from suit.admin import SortableTabularInline
 from django.forms import CheckboxSelectMultiple
 from studies.models import *
+from custom_auth.models import User
 
 class GroupStageInline(SortableTabularInline):
 	model = GroupStage
@@ -39,6 +40,12 @@ class GroupAdmin(admin.ModelAdmin):
 	filter_horizontal = ("users",)
 	list_display = ('name', 'study')
 	suit_form_tabs = (('general', 'Manage Users'), ('stages', 'Stages'))
+
+	def save_model(self, request, obj, form, change):
+		for group_stage in GroupStage.objects.filter(group=obj):
+			for participant in group_stage.group.users.all():
+				UserStage.objects.create(user=participant, group_stage=group_stage)
+		obj.save()
 
 class UserStageAdmin(admin.ModelAdmin):
 	list_display = ('user', 'group_stage', 'status')
