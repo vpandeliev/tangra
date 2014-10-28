@@ -152,3 +152,6 @@ class Data(models.Model):
 	user_stage = models.ForeignKey(UserStage)
 	timestamp = models.DateTimeField()
 	datum = models.TextField()
+
+	def __unicode__(self):
+		return unicode("Data: %s" % (self.datum))
