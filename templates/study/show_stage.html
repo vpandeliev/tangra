@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Study{% endblock %}
+
+{% block head %}
+	{% load staticfiles %}
+	<link href="{% static 'css/participant/offcanvas.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+	<div class="btn-group btn-group-justified">
+		{% for stage in stages %}
+		<div class="btn-group btn-group-lg">
+			{% if stage.status > 1 %}
+				<!-- Future stage -->
+				<a type="button" class="btn btn-default" href="{% url 'studies:stage' study.id stage.group_stage.order %}">
+			{% elif stage.status == 1 %}
+				<!-- Active stage -->
+				<a type="button" class="btn btn-success" href="{% url 'studies:stage' study.id stage.group_stage.order %}">
+			{% else %}
+				<!-- Past stage -->
+				<a type="button" class="btn btn-default" style="color:#AAAAAA" href="{% url 'studies:stage' study.id stage.group_stage.order %}">
+			{% endif %}
+			{{stage.group_stage.order}}. {{stage.group_stage.stage.name}}
+			</a>
+		</div>
+		{% endfor %}
+	</div>
+
+	<br>
+
+	{% if cur_stage.is_overdue %}
+		<div class="alert alert-danger" role="alert">
+			<b>Attention!</b> You are overdue completing this stage!
+		</div>
+	{% endif %}
+
+	<div class="jumbotron">
+
+		<h1 style="font-size:50px">{{cur_stage.group_stage.stage.name}}</h1>
+		<p>{{cur_stage.group_stage.stage.description}}</p>
+		<br>
+		<p><b>Due Date:</b> {{cur_stage.get_deadline}}</p>
+		<a href="{{cur_stage.group_stage.stage.url}}/{{cur_stage.id}}">
+		{% if cur_stage.status > 1 %}
+			<!-- Future stage -->
+			<button type="button" class="btn btn-lg btn-success" disabled>Future stage</button>
+		{% elif cur_stage.status == 1 %}
+			<!-- Active stage -->
+			<button type="button" class="btn btn-lg btn-success">Click to start session</button>
+		{% else %}
+			<!-- Past stage -->
+			<button type="button" class="btn btn-lg btn-success" disabled>Completed stage</button>
+		{% endif %}
+		</a>
+	</div>
+
+
+{% endblock %}

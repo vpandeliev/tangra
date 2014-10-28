@@ -16,20 +16,44 @@ def show_active_studies(request):
 	return render_to_response('study/show_active_studies.html', locals(), context_instance=RequestContext(request))
 
 @login_required
-def show_study(request, s_id):
-	"""	Display the study with id 's_id'. """
-	study_id = int(s_id)
+def show_study(request, study_id):
+	"""	Display the study with id 'study_id'. """
 	request.session['study_id'] = study_id
 	study = Study.objects.get(id=study_id)
-	username = request.user.username
+
+	active_stages = UserStage.get_active_stages(request.user, study)
+
+	if len(active_stages) <= 0:
+		# There are no available actions to do within this study
+		return HttpResponseRedirect(reverse('studies:active_studies'))
+
+	stage = active_stages[0]
+
+	return HttpResponseRedirect(reverse('studies:stage', args=[study_id, stage.group_stage.order]))
+
+
+def show_stage(request, study_id, stage_number):
+	""" Display the stage_number'th stage of study with ID 's_id', for the
+		participant who sent the request. """
+	request.session['study_id'] = study_id
+	study = Study.objects.get(id=study_id)
+
+	if len(UserStage.get_active_stages(request.user, study)) <= 0:
+		# There are no available actions to do within this study
+		return HttpResponseRedirect(reverse('studies:active_studies'))
 
 	# Get all of the user stages associated with this study (in order)
 	stages = UserStage.objects.filter(user=request.user, group_stage__stage__study=study)
 	stages = stages.order_by('group_stage__order')
 
-	if len(UserStage.get_active_stages(request.user, study)) > 0:
-		# There are active stages associated with this study
-		return render_to_response('study/old_show_study.html', locals(), context_instance=RequestContext(request))
-	else:
-		# There are no available actions to do within this study
+	# Get the current stage to show information
+	try:
+		cur_stage = UserStage.objects.get(
+			user=request.user,
+			group_stage__stage__study=study,
+			group_stage__order=stage_number
+		)
+	except:
 		return HttpResponseRedirect(reverse('studies:active_studies'))
+
+	return render_to_response('study/show_stage.html', locals(), context_instance=RequestContext(request))
