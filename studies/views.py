@@ -13,6 +13,9 @@ def show_active_studies(request):
 	# TODO: Instead use this to return a list of studies
 	current_stages = UserStage.get_active_stages(request.user)
 	investigator_studies = Study.objects.filter(investigators=request.user)
+	groups = {}
+	for study in investigator_studies:
+		groups[study.id] = Group.objects.filter(study=study)
 	return render_to_response('study/show_active_studies.html', locals(), context_instance=RequestContext(request))
 
 @login_required

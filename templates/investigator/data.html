@@ -10,6 +10,7 @@
 {% block nav %}
 <ul class="nav nav-sidebar">
   <li><a href="{% url 'studies:investigator:study' study_id %}">Overview</a></li>
+  <li><a href="{% url 'studies:investigator:details' study_id %}">Study Details</a></li>
   <li><a href="#">Export Data</a></li>
 </ul>
 <hr>
@@ -17,16 +18,27 @@
   {% for stage in stages %}
     <li {% if user_stage.id = stage.id %}class="active"{% endif %}>
       <a href="{% url 'studies:investigator:user_stage' study_id user_id stage.group_stage.order %}">
-        {{stage.group_stage.order}}:
         {{stage.group_stage.stage.name|capfirst}}
         {% if stage.is_overdue %}
-          <span class="label label-danger" style="float:right">Overdue!</span>
+          <!-- Overdue stage -->
+          <span class="label label-danger" style="float:right">
+            <span class="glyphicon glyphicon-time"></span>
+          </span>
         {% elif stage.status = 0 %}
-          <span class="label label-default" style="float:right">Done</span>
+          <!-- Completed stage -->
+          <span class="label label-default" style="float:right">
+            <span class="glyphicon glyphicon-ok"></span>
+          </span>
         {% elif stage.status = 1 %}
-          <span class="label label-success" style="float:right">Active</span>
+          <!-- Active stage -->
+          <span class="label label-success" style="float:right">
+            <span class="glyphicon glyphicon-time"></span>
+          </span>
         {% elif stage.status = 2 %}
-          <span class="label label-info" style="float:right">Future</span>
+          <!-- Future stage -->
+          <span class="label label-info" style="float:right">
+            <span class="glyphicon glyphicon-minus-sign"></span>
+          </span>
         {% endif %}
       </a>
     </li>
@@ -65,8 +77,20 @@
   </div>
 </div>
 
-<h2 style="margin-top:30px">Stage {{stage_number}}: {{user_stage.group_stage.stage.name}}</h2>
-{{user_stage.group_stage.stage.description}}
+
+<h2 style="margin-top:30px">
+  Stage {{stage_number}}: {{user_stage.group_stage.stage.name}}
+  {% if user_stage.is_overdue %}
+    <span class="label label-danger" style="font-size:15px; vertical-align:middle">Overdue!</span>
+  {% elif user_stage.status = 0 %}
+    <span class="label label-default" style="font-size:15px; vertical-align:middle">Done</span>
+  {% elif user_stage.status = 1 %}
+    <span class="label label-success" style="font-size:15px; vertical-align:middle">Active</span>
+  {% elif user_stage.status = 2 %}
+    <span class="label label-info" style="font-size:15px; vertical-align:middle">Future</span>
+  {% endif %}
+</h2>
+{{user_stage.group_stage.stage.description|safe}}
 <hr>
 
 <!-- BUTTONS -->
@@ -105,7 +129,7 @@
     <tbody>
       {% for d in data %}
       <tr>
-        <td>{{d.user|capfirst}}</td>
+        <td>{{d.user.username|capfirst}}</td>
         <td>{{d.timestamp}}</td>
         <td>{{d.datum}}</td>
       </tr>

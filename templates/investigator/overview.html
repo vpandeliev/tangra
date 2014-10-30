@@ -10,6 +10,7 @@
 {% block nav %}
 <ul class="nav nav-sidebar">
   <li class="active"><a href="#">Overview</a></li>
+  <li><a href="{% url 'studies:investigator:details' study_id %}">Study Details</a></li>
   <li><a href="#">Export Data</a></li>
 </ul>
 {% endblock %}

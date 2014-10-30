@@ -11,18 +11,37 @@
 
 <div class="container">
 
+	<p><h1 style="font-size:50px">
+		{{cur_stage.group_stage.stage.study.name}}
+		<span class="glyphicon glyphicon-info-sign" style="font-size:30px"></span>
+	</h1><p>
+
+	<br>
+
 	<div class="btn-group btn-group-justified">
 		{% for stage in stages %}
 		<div class="btn-group btn-group-lg">
+
 			{% if stage.status > 1 %}
 				<!-- Future stage -->
-				<a type="button" class="btn btn-default" href="{% url 'studies:stage' study.id stage.group_stage.order %}">
+				<a type="button" href="{% url 'studies:stage' study.id stage.group_stage.order %}" style="color:#AAAAAA"
+				{% if stage.id = cur_stage.id %} class="btn btn-info"
+				{% else %} class="btn btn-default"
+				{% endif %}>
+				<span class="glyphicon glyphicon-minus-sign"></span>
 			{% elif stage.status == 1 %}
 				<!-- Active stage -->
-				<a type="button" class="btn btn-success" href="{% url 'studies:stage' study.id stage.group_stage.order %}">
+				<a type="button" href="{% url 'studies:stage' study.id stage.group_stage.order %}"
+				{% if stage.id = cur_stage.id %} class="btn btn-info"
+				{% else %} class="btn btn-default"
+				{% endif %}>
+				<span class="glyphicon glyphicon-time"></span>
 			{% else %}
 				<!-- Past stage -->
-				<a type="button" class="btn btn-default" style="color:#AAAAAA" href="{% url 'studies:stage' study.id stage.group_stage.order %}">
+				<a type="button" href="{% url 'studies:stage' study.id stage.group_stage.order %}"
+				{% if stage.id = cur_stage.id %} class="btn btn-info"
+				{% else %} class="btn btn-default"
+				{% endif %}>
 				<span class="glyphicon glyphicon-ok"></span>
 			{% endif %}
 			{{stage.group_stage.stage.name}}
@@ -35,29 +54,65 @@
 
 	{% if cur_stage.is_overdue %}
 		<div class="alert alert-danger" role="alert">
+			<span class="glyphicon glyphicon-warning-sign"></span>
 			<b>Attention!</b> You are overdue completing this stage!
 		</div>
 	{% endif %}
 
-	<div class="jumbotron">
 
-		<h1 style="font-size:50px">{{cur_stage.group_stage.stage.name}}</h1>
-		<p>{{cur_stage.group_stage.stage.description|safe}}</p>
-		<br>
-		<p><b>Due Date:</b> {{cur_stage.get_deadline}}</p>
-		<a href="{{cur_stage.group_stage.stage.url}}/{{cur_stage.id}}">
-		{% if cur_stage.status > 1 %}
-			<!-- Future stage -->
-			<button type="button" class="btn btn-lg btn-default" disabled>Future stage</button>
-		{% elif cur_stage.status == 1 %}
-			<!-- Active stage -->
-			<button type="button" class="btn btn-lg btn-success">Click to start session</button>
-		{% else %}
-			<!-- Past stage -->
-			<button type="button" class="btn btn-lg btn-default" disabled>Completed stage</button>
-		{% endif %}
-		</a>
+	<div class="jumbotron" style="padding:30px;">
+
+		<div class="row row-offcanvas row-offcanvas-right">
+
+			<div class="col-xs-12 col-sm-8" style="border-right: solid #333333;">
+				<h1 style="font-size:45px">{{cur_stage.group_stage.stage.name}}</h1>
+				<p>{{cur_stage.group_stage.stage.description|safe}}</p>
+				<br>
+				{% if cur_stage.status == 1 and cur_stage.get_deadline != None %}
+					<!-- Active stage -->
+					<p><b>Due Date:</b> {{cur_stage.get_deadline}}</p>
+				{% elif cur_stage.status == 0 and cur_stage.end_date != None %}
+					<!-- Past stage -->
+					<p><b>Completed On:</b> {{cur_stage.end_date}}</p>
+				{% endif %}
+			</div>
+
+			<div class="col-xs-6 col-sm-4 sidebar-offcanvas" id="sidebar" role="navigation">
+
+				{% if cur_stage.is_overdue %}
+					<span class="label label-danger" style="float:right; font-size:15px">Overdue!</span>
+				{% elif cur_stage.status = 0 %}
+					<span class="label label-default" style="float:right; font-size:15px">Done</span>
+				{% elif cur_stage.status = 1 %}
+					<span class="label label-success" style="float:right; font-size:15px">Active</span>
+				{% elif cur_stage.status = 2 %}
+					<span class="label label-info" style="float:right; font-size:15px">Future</span>
+				{% endif %}
+
+				{% if cur_stage.group_stage.stage.instructions != None %}
+					<p><b>Instructions</b></p>
+					<p>{{cur_stage.group_stage.stage.instructions}}</p>
+					<br><br>
+				{% endif %}
+				<center>
+				{% if cur_stage.status > 1 %}
+					<!-- Future stage -->
+					<button type="button" class="btn btn-lg btn-default" disabled>Future stage</button>
+				{% elif cur_stage.status == 1 %}
+					<!-- Active stage -->
+					<a href="{{cur_stage.group_stage.stage.url}}/{{cur_stage.id}}" class="btn btn-lg btn-success">Click to start session</a>
+				{% else %}
+					<!-- Past stage -->
+					<button type="button" class="btn btn-lg btn-default" disabled>Completed stage</button>
+				{% endif %}
+				</center>
+			</div>
+
+		</div>
+
 	</div>
+
+</div>
 
 
 {% endblock %}

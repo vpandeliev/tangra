@@ -71,7 +71,7 @@
 
 {% if investigator_studies|length > 0 %}
 
-	<h3>You are an investigator for the following studies:</h3>
+	<h3>You are a researcher for the following studies:</h3>
 
 	<br>
 
@@ -100,10 +100,12 @@
 
       <table class="table">
     		<tbody>
-        	<tr>
-						<th width="175">Particpants</th>
-						<td># of participants</td>
-          </tr>
+					{% for group in groups|get_item:study.id %}
+						<tr>
+							<th width="175">{{group.name}}</th>
+							<td>{{group.users.count}} participants</td>
+						</tr>
+					{% endfor %}
       		<tr>
       			<td colspan="2">
       				<center>
