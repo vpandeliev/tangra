@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from studies.models import *
-#from django.contrib.auth.models import User
 from custom_auth.models import User
 from django.template.defaulttags import register
 
@@ -100,3 +99,13 @@ def user_stage(request, study_id, user_id, stage_number):
 	hide_title=True
 
 	return render_to_response('investigator/data.html', locals(), context_instance=RequestContext(request))
+
+
+def study_details(request, study_id):
+	""" Display the details of the study with the ID 'study_id'. """
+	request.session['study_id'] = study_id
+	study = Study.objects.get(id=study_id)
+
+	#TODO: Make sure only authorized users can view this page
+
+	return render_to_response('investigator/study_details.html', locals(), context_instance=RequestContext(request))

@@ -1,0 +1,43 @@
+{% extends 'dashboard.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+  {% load staticfiles %}
+  <link href="{% static 'css/investigator/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block nav %}
+<ul class="nav nav-sidebar">
+  <li><a href="{% url 'studies:investigator:study' study_id %}">Overview</a></li>
+  <li class="active"><a href="#">Study Details</a></li>
+  <li><a href="#">Export Data</a></li>
+</ul>
+{% endblock %}
+
+{% block page-title %}Study Details: {{study.name}}{% endblock %}
+
+{% block page-content %}
+
+<h2>Description</h2>
+<p style="font-size:17px">{{study.description}}</p>
+<br>
+
+<h2>Consent</h2>
+<p style="font-size:17px">{{study.consent}}</p>
+<br>
+
+<h2>Instructions</h2>
+<p style="font-size:17px">{{study.instructions}}</p>
+<br>
+
+<h2>Eligibility</h2>
+<p style="font-size:17px">{{study.eligibility}}</p>
+<br>
+
+<h2>Reward</h2>
+<p style="font-size:17px">{{study.reward}}</p>
+<br>
+
+
+{% endblock %}
