@@ -118,6 +118,6 @@ class PublicAPIView(APIView):
 	    # Return the JSON string message.
 	    return Response({"success" : "Data successfully added"}, status=status.HTTP_201_CREATED)
         except ObjectDoesNotExist:
-	    return Response({"detail" : "User is not registered for this study."}, status=status.HTTP_403_FORBIDDEN)
+	    return Response({"detail" : "User is not registered for this study."}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({"detail" : str(e)}, status=status.HTTP_400_BAD_REQUEST)
