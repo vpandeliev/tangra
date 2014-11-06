@@ -14,6 +14,7 @@ from serializers import *
 from rest_framework import status
 from django.utils import timezone
 from studies.models import *
+from django.core.exceptions import *
 
 
 class PublicAPIView(APIView):
@@ -65,11 +66,11 @@ class PublicAPIView(APIView):
 		    t = Token.objects.create(user=request.user)
 		    return Response({"token":str(t)}, status=status.HTTP_201_CREATED)
 	    else:
-		return Response({"error" : "Bad request", 
+		return Response({"detail" : "Bad request", 
 		                 "data": str(request.GET)}, 
 		                status=status.HTTP_400_BAD_REQUEST)
 	except Exception as e:
-	    return Response({"error" : str(e)}, status=status.HTTP_400_BAD_REQUEST) 
+	    return Response({"detail" : str(e), "data":str(request.GET)}, status=status.HTTP_400_BAD_REQUEST) 
 
     def post(self, request, format=None):
         """
@@ -105,12 +106,8 @@ class PublicAPIView(APIView):
 		    t = request.DATA["timestamp"]
 	    
 	    # Get the user stage and make sure that the user is allowed to access it.
-	    #us = get_current_stage(Study.objects.get(api_name=request.DATA["study_api_name"], user=request.user))
 	    study = Study.objects.get(api_name=request.DATA["study"])
 	    us = UserStage.objects.get(group_stage__stage__study=study, user=request.user, status=1)
-
-	    if us.user != request.user:
-		raise Exception("The request's user and the user stage's user do not match.")
 	    
 	    # Finally create a new data.
 	    new_data = Data.objects.create(user=request.user,
@@ -120,5 +117,7 @@ class PublicAPIView(APIView):
 	    
 	    # Return the JSON string message.
 	    return Response({"success" : "Data successfully added"}, status=status.HTTP_201_CREATED)
+        except ObjectDoesNotExist:
+	    return Response({"detail" : "User is not registered for this study."}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
-            return Response({"error" : str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail" : str(e)}, status=status.HTTP_400_BAD_REQUEST)
