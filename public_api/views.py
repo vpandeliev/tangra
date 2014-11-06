@@ -13,6 +13,7 @@ from rest_framework import authentication, permissions
 from serializers import *
 from rest_framework import status
 from django.utils import timezone
+from studies.models import *
 
 
 class PublicAPIView(APIView):
@@ -84,12 +85,12 @@ class PublicAPIView(APIView):
         """
         
         try:
-	    from studies.models import UserStage
+	    
 		
 	    """
 	    Note that the data sent via POST must be a JSON and it must follow
 	    this format:
-	    - user_stage: an integer
+	    - study: the study's API name.
 	    - timestamp: a datetime string following the format of YYYY-MM-DD HH:MM:SS.
 	      It can also be "now" which uses the time when the server receives
 	      the data instead.
@@ -104,7 +105,9 @@ class PublicAPIView(APIView):
 		    t = request.DATA["timestamp"]
 	    
 	    # Get the user stage and make sure that the user is allowed to access it.
-	    us = UserStage.objects.get(id=int(request.DATA["user_stage"]))
+	    #us = get_current_stage(Study.objects.get(api_name=request.DATA["study_api_name"], user=request.user))
+	    study = Study.objects.get(api_name=request.DATA["study"])
+	    us = UserStage.objects.get(group_stage__stage__study=study, user=request.user, status=1)
 
 	    if us.user != request.user:
 		raise Exception("The request's user and the user stage's user do not match.")

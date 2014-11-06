@@ -7,7 +7,9 @@ from django.db.models import Q
 
 class Study(models.Model):
 	"""	A Study contains all of the general data associated with a study. """
+	
 	name = models.CharField('Study Name', max_length=300)
+	api_name = models.CharField('API Name', max_length=20)
 	description = models.CharField('Description', max_length=5000)
 	consent = models.CharField('Informed Consent Form', max_length=5000)
 	instructions = models.CharField('Study Instructions', max_length=5000)
