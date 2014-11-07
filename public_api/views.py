@@ -61,7 +61,7 @@ class PublicAPIView(APIView):
 		
 		if c > 0:
 		    t = Token.objects.get(user=request.user)
-		    return Response({"token":str(t)}, status=status.HTTP_200_OK)
+		    return Response({"token":str(t), "defail":"success"}, status=status.HTTP_200_OK)
 		else:
 		    t = Token.objects.create(user=request.user)
 		    return Response({"token":str(t)}, status=status.HTTP_201_CREATED)
@@ -116,8 +116,8 @@ class PublicAPIView(APIView):
 	                                   datum=request.DATA['datum'])
 	    
 	    # Return the JSON string message.
-	    return Response({"success" : "Data successfully added"}, status=status.HTTP_201_CREATED)
+	    return Response({"detail" : "success"}, status=status.HTTP_201_CREATED)
         except ObjectDoesNotExist:
-	    return Response({"detail" : "User is not registered for this study."}, status=status.HTTP_401_UNAUTHORIZED)
+	    return Response({"detail" : "User is not registered for this study or the study doesn't exist."}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({"detail" : str(e)}, status=status.HTTP_400_BAD_REQUEST)
