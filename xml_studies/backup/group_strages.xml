@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0"><object pk="1" model="studies.groupstage"><field to="studies.group" name="group" rel="ManyToOneRel">1</field><field to="studies.stage" name="stage" rel="ManyToOneRel">1</field><field type="PositiveIntegerField" name="order">0</field></object></django-objects>

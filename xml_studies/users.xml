@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+	<object pk="1" model="custom_auth.user"><field type="CharField" name="password">pbkdf2_sha256$12000$MqioX0AghL7N$lnFO/WHPDMT0lQHDY90ZNVuTyZw8W1pfsJkEGLM3NXo=</field><field type="DateTimeField" name="last_login">2014-11-14T18:24:56.938857+00:00</field><field type="CharField" name="username">admin</field><field type="CharField" name="email">admin.gaga@gaga.py</field><field type="BooleanField" name="is_active">True</field><field type="BooleanField" name="is_admin">True</field><field type="IntegerField" name="age">0</field><field type="IntegerField" name="gender">2</field></object></django-objects>

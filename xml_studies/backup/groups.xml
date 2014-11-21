@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0"><object pk="1" model="studies.group"><field type="CharField" name="name">Pink</field><field to="studies.study" name="study" rel="ManyToOneRel">1</field><field to="custom_auth.user" name="users" rel="ManyToManyRel"><object pk="1"></object></field></object></django-objects>

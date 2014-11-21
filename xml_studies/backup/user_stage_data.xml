@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0"><object pk="1" model="studies.userstage"><field to="custom_auth.user" name="user" rel="ManyToOneRel">1</field><field to="studies.groupstage" name="group_stage" rel="ManyToOneRel">1</field><field type="IntegerField" name="status">1</field><field type="DateTimeField" name="available">2014-11-06T18:46:21+00:00</field><field type="DateTimeField" name="start_date">2014-11-06T18:46:27+00:00</field><field type="DateTimeField" name="end_date">2015-04-20T17:46:34+00:00</field></object></django-objects>

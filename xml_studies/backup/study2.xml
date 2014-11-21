@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+	<object model="studies.study">
+		<field name="name">Morris Water Maze Task</field>
+		<field name="api_name">morris_task</field>
+		<field name="description">Do yet another psychological test.</field>
+		<field name="consent">We humans get to do what we want.</field>
+		<field name="instructions">We dunk you in the water. You find the platform. We rescue you. You eat cheese.</field>
+		<field name="eligibility">You must be a mice!</field>
+		<field name="reward">Blue Cheese</field>
+		<field name="start_date">2014-11-06</field>
+		<field name="end_date">2015-05-20</field>
+		<field to="custom_auth.user" name="investigators" rel="ManyToManyRel">
+			<object pk="1"></object>
+		</field>
+	</object>
+</django-objects>
