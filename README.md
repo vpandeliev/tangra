@@ -1,3 +1,6 @@
+WARNING: This branch contains a bleeding edge feature that is still incomplete. Do not use the XML functionality provided here as it is still unstable. This branch is also frozen. The only people who should use this branch are those who intend to further develop the XML feature.
+========
+
 Tangra 3.0
 ======
 
