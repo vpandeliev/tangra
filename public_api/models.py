@@ -1,3 +1,3 @@
 from django.db import models
 
-""" The models from Tangra are used in this case. """
+""" There are no models for the public API. """

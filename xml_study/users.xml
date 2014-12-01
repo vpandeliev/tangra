@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<users>
+    <user name="adal" password="password" email="adal@swordfish.edu"/>
+    <user name="charlesb" password="password" email="charlesb@swordfish.edu"/>
+    <user name="alant" password="password" email="alant@swordfish.edu"/>
+    <user name="allenn" password="password" email="allenn@swordfish.edu"/>
+    <user name="kante" password="password" email="lord_kante@swordfish.edu"/>
+    <user name="nalatie" password="password" email="darth.vader@swordfish.edu"/>
+    <!-- Error!!!! 
+    <user name="allenn"/> -->
+</users>

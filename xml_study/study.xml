@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+	<study>
+		<name>Posner Test</name>
+		
+		<api_name>posner_test</api_name>
+		
+		<description>Posner Test is a test of your attention.</description>
+		
+		<consent>This experiment will not put you in any danger.
+		Pinky Promise?</consent>
+		
+		<instructions>General Instruction: You will fixate on the center point on the screen.
+		Click left if the left point blinks. Click right if the right
+		point blinks. More detailed instructions will be provided later.</instructions>
+		
+		<eligibility>This test is specialized toward people with
+		lesions in the cerebellum. You must be screened by the doctor
+		first.</eligibility>
+		
+		<reward>$12/hr and free imaging of your brain.</reward>
+	
+		<start_date>2015-09-10</start_date>
+		
+		<end_date>2015-09-30</end_date>
+	
+		<!-- All users who should be able to administer the study. Investigators
+		CANNOT be participants! -->
+		<investigators>
+			<user name="kante"/>
+			<user name="nalatie"/>
+		</investigators>
+	
+		<!-- 
+			List the directories of all stages in your study here (order is not 
+			important in this section)
+		-->
+		<stages>
+			<stage number="1">
+				<name>EGG Installation</name>
+				<description>At this tage, an assistant will install EGG hat on your head.</description>
+				<instructions>Follow the instructions provided by the assistant.</instructions>
+				<url></url>
+			</stage>
+			<stage number="2">
+				<name>Posner Task I</name>
+				<description>Perform the Posner Task I</description>
+				<instructions>There are three points on the screen. Focus your eye on the central point.
+				Put your hand on your mouse. Click either of the buttons on the mouse to start the test.
+				The left and right points will blink arbritarily. Click left when the left point blinks
+				and click right when the right point blinks. Occassionally, other objects may appear
+				on the screen, do not be alaramed.</instructions>
+				<url>posner_1.html</url>
+			</stage>
+			<stage number="3">
+				<name>Posner Task II</name>
+				<description>Perform the Posner Task II</description>
+				<instructions>The instruction is the same with the first one. There are three points on 
+				the screen. Focus your eye on the central point. Put your hand on your mouse. Click 
+				either of the buttons on the mouse to start the test. The left and right points will blink 
+				arbritarily. Click left when the left point blinks and click right when the right point 
+				blinks. Occassionally, other objects may appear on the screen, do not be alaramed.
+				</instructions>
+				<url>posner_2.html</url>
+			</stage>
+			
+		</stages>
+	
+	
+		<!-- One entry for each distinct group in the study -->
+		<groups>
+			<group>
+				<name>Cerebellar Agenesis</name>
+				<users>
+					<user name="charlesb"/>
+				</users>
+				<stage_orders>
+					<order>1</order>
+					<order>2</order>
+					<order>3</order>
+				</stage_orders>
+			</group>
+			
+			<group>
+				<name>Cerebellar Stroke</name>
+				<users>
+					<user name="adal"/>
+					<user name="alant"/>
+					<user name="allenn"/>
+				</users>
+				<stage_orders>
+					<order>1</order>
+					<order>2</order>
+					<order>3</order>
+				</stage_orders>
+			</group>
+		</groups>
+
+	</study>

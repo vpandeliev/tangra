@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<users>
+    <user name="adal" password="password" email="adal@swordfish.edu"/>
+    <user name="charlesb" password="password" email="charlesb@swordfish.edu"/>
+    <user name="alant" password="password" email="alant@swordfish.edu"/>
+    <game>Call of Duty 5</game>
+</users>
