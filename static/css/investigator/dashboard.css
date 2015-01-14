@@ -8,6 +8,10 @@ body {
   background-color: #fefefe;
 }
 
+textarea {
+  width: 100%;
+}
+
 
 /*
  * Global add-ons
