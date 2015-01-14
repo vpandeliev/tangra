@@ -50,7 +50,9 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=True)
 
-    # Custom fields go here
+    ######################################
+    # NOTE: ADD ALL CUSTOM FIELDS HERE!! #
+    ######################################
     age = models.IntegerField(max_length=3, default=0)
     GENDER_CHOICES = ((0, 'Female'), (1, 'Male'), (2, 'Other'))
     gender = models.IntegerField(max_length=1, choices=GENDER_CHOICES, default=2)
