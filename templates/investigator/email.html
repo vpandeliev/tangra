@@ -1,0 +1,58 @@
+{% extends 'dashboard.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+  {% load staticfiles %}
+  <link href="{% static 'css/investigator/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block nav %}
+<ul class="nav nav-sidebar">
+  <li><a href="{% url 'studies:investigator:study' study_id %}">Overview</a></li>
+  <li><a href="{% url 'studies:investigator:details' study_id %}">Study Details</a></li>
+  <li class="active"><a href="#">Email participants</a></li>
+  <li><a href="{% url 'studies:investigator:export' study_id %}">Export Data</a></li>
+</ul>
+{% endblock %}
+
+{% block page-title %}{{study.name}}: Email{% endblock %}
+
+{% block page-content %}
+
+{% if confirm %}
+<div class="alert alert-success alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <strong>Yay!</strong> Email to {{to_name|capfirst}} was successfully sent!
+</div>
+{% endif %}
+
+{% if user_id %}
+<form action="{% url 'studies:investigator:email_user' study_id user_id %}" method="post">
+  {% csrf_token %}
+  <p><b>To:</b> {{participant.username|capfirst}} ({{participant.email}})</p>
+  <p><b>From:</b> {{from_name}} ({{from_email}})</p>
+  {{ form.as_p }}
+  <input type="submit" value="Send email" />
+</form>
+
+{% elif group_id %}
+<form action="{% url 'studies:investigator:email_group' study_id group_id %}" method="post">
+  {% csrf_token %}
+  <p><b>To:</b> {{to_name|capfirst}} ({{to_emails}})</p>
+  <p><b>From:</b> {{from_name}} ({{from_email}})</p>
+  {{ form.as_p }}
+  <input type="submit" value="Send email" />
+</form>
+
+{% else %}
+<form action="{% url 'studies:investigator:email_all' study_id %}" method="post">
+  {% csrf_token %}
+  <p><b>To:</b> All participants</p>
+  <p><b>From:</b> {{from_name}} ({{from_email}})</p>
+  {{ form.as_p }}
+  <input type="submit" value="Send email" />
+</form>
+{% endif %}
+
+{% endblock %}
