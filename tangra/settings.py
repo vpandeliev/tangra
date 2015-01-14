@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/files')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -43,6 +44,16 @@ STATICFILES_DIRS = (
 LOGIN_URL = '/admin'
 
 AUTH_USER_MODEL = 'custom_auth.User'
+
+# Email configuration
+EMAIL_BACKEND =         'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST =            'smtp.gmail.com'
+EMAIL_HOST_USER =       'taglab.developer@gmail.com'
+EMAIL_HOST_PASSWORD =   'T4GlabDev'
+EMAIL_SUBJECT_PREFIX =  '[Tangra] '
+EMAIL_PORT =            587
+EMAIL_USE_TLS =         True
+EMAIL_HOST_NAME =       'Admin'
 
 
 SUIT_CONFIG = {
