@@ -1,5 +1,5 @@
+import os
 from django.db import models
-#from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import timezone
 import datetime
@@ -8,11 +8,11 @@ from django.db.models import Q
 class Study(models.Model):
 	"""	A Study contains all of the general data associated with a study. """
 	name = models.CharField('Study Name', max_length=300)
-	description = models.CharField('Description', max_length=5000)
-	consent = models.CharField('Informed Consent Form', max_length=5000)
-	instructions = models.CharField('Study Instructions', max_length=5000)
-	eligibility = models.CharField('Eligibility Criteria', max_length=5000)
-	reward = models.CharField('Compensation and Reward', max_length=5000)
+	description = models.CharField('Description', max_length=5000, blank=True, null=True)
+	consent = models.CharField('Informed Consent Form', max_length=5000, blank=True, null=True)
+	instructions = models.CharField('Study Instructions', max_length=5000, blank=True, null=True)
+	eligibility = models.CharField('Eligibility Criteria', max_length=5000, blank=True, null=True)
+	reward = models.CharField('Compensation and Reward', max_length=5000, blank=True, null=True)
 
 	start_date = models.DateField('Starting date', blank=True, null=True)
 	end_date = models.DateField('End date', blank=True, null=True)
@@ -126,8 +126,25 @@ class UserStage(models.Model):
 		return timezone.now() > deadline
 
 
+	def complete_stage(self):
+		""" Complete the user stage. """
+		self.status = 0
+		self.end_date = datetime.datetime.now()
+		self.save()
+
+
+	def start_stage(self):
+		""" Start the user stage. """
+		self.status = 1
+		# Set availability???
+		self.start_date = datetime.datetime.now()
+		self.save()
+
+
 	@staticmethod
 	def get_active_stages(user, study=None):
+		""" Get the active stages for the specified 'user' and 'study'.
+			An active stage is defined as a stage that has been started but not ended. """
 		active_stages = UserStage.objects.filter(user=user, status=1)
 
 		# Studies should be started
@@ -147,11 +164,44 @@ class UserStage(models.Model):
 
 
 class Data(models.Model):
-	"""	Data contains all of the data collected from the Study. """
+	"""	Data table contains all of the data collected from the Study. """
+	# user: the author of the data (most commonly the participant)
 	user = models.ForeignKey(settings.AUTH_USER_MODEL)
 	user_stage = models.ForeignKey(UserStage)
-	timestamp = models.DateTimeField()
-	datum = models.TextField()
+	timestamp = models.DateTimeField(auto_now=True)
+	datum = models.TextField(null=True, blank=True)
+	attachment = models.FileField(null=True, blank=True)
 
 	def __unicode__(self):
 		return unicode("Data: %s" % (self.datum))
+
+	def filename(self):
+		if self.attachment is not None:
+			return os.path.basename(self.attachment.url)
+
+
+class Note(models.Model):
+	""" Note table contains all of the notes collected from the Study. """
+	# user: author of the note (this is most likely be the investigator)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL)
+	timestamp = models.DateTimeField(auto_now=True)
+	datum = models.TextField(null=True, blank=True)
+	attachment = models.FileField(null=True, blank=True)
+	study = models.ForeignKey(Study)
+
+	# What notes can be associated with
+	#participant = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True)
+	stage = models.ForeignKey(Stage, blank=True, null=True)
+	group = models.ForeignKey(Group, blank=True, null=True)
+	group_stage = models.ForeignKey(GroupStage, blank=True, null=True)
+	user_stage = models.ForeignKey(UserStage, blank=True, null=True)
+
+	# If this note was sent as an email to investigators
+	email = models.BooleanField(default=False)
+
+	def __unicode__(self):
+		return unicode("Note: %s" % (self.datum))
+
+	def filename(self):
+		if self.attachment is not None:
+			return os.path.basename(self.attachment.url)
