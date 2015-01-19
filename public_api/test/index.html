@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Tangra API Testing Tool</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>  
+</head>
+<body>
+
+<div class="container">
+  <div class="jumbotron">
+    <h1>Tangra Public API Testing Tool</h1>
+    <p>Use this tool to see whether your server has been set up correctly or not!</p> 
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Step 1: Setting Information</h3>
+      <p>Provide the credentials to test the server.</p>
+      
+      <form>
+      <h4>Server's API URL:</h4>
+      <p>The format should be http(s)://[your server name]/api/</p>
+      <input id="server_api" type="text" />
+      <h4>Study API Name:</h4>
+      <input id="study" type="text" />
+      <h4>Dummy User's Username:</h4>
+      <input id="username" type="text" />
+      <h4>Dummy User's Password:</h4>
+      <input id="password" type="password" />
+      <hr/>
+      <input id="verify" type="button" value="Verify">
+      </form>
+    </div>
+    <div class="col-sm-4">
+      <h3>Step 2: Sending Test Data</h3>
+      
+      <form>
+      <h4>Test Data:</h4>
+      <input id="data" type="text" />
+      <hr/>
+      <input id="send" type="button" value="Send">
+      </form>
+    </div>
+    <div class="col-sm-4">
+      <h3>Step 3: Check and Re-Check</h3>        
+      <p>Check Data model from the admin view to see if data is transmitted correctly.
+      If you want to re-test, you can also keep repeating Step 2 or you can click
+      the button below to start from Step 1.</p>
+      <form>
+      <input id="reset" type="button" value="Restart">
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+
+<script>
+window.token = 0;
+window.study = "";
+
+$(document).ready(function() {
+  $("#data").attr("disabled", "disabled");
+  $("#send").attr("disabled", "disabled");
+
+  $("#verify").click(function() {
+    var server_api = $("#server_api").val();
+    study = $("#study").val()
+    var username = $("#username").val();
+    var password = $("#password").val();
+    
+    $.ajax({
+      async: false,
+      data:'get=token',
+      url: server_api,
+      headers: {'Authorization': 'Basic ' + btoa(username +':'+ password)},
+      success:function(data) { 
+        window.token=data['token'];
+        alert("Successful! Step 1 passed!");
+                    
+        $("#server_api").attr("disabled", "disabled");
+        $("#study").attr("disabled", "disabled");
+        $("#username").attr("disabled", "disabled");
+        $("#password").attr("disabled", "disabled");
+        $("#verify").attr("disabled", "disabled");
+        $("#data").removeAttr("disabled");
+        $("#send").removeAttr("disabled");
+      },
+      error:function(jqXHR) {
+        alert("Failure! Please check the message below:\n" + jqXHR.responseText);
+      }
+    });
+  });
+  
+  $("#send").click(function() {            
+    $.ajax({
+      async: false,
+      data: JSON.stringify({'datum':$("#data").val(), 
+                            'study':window.study, 
+                            'timestamp': 'now'}),
+      url:"http://127.0.0.1:8000/api/",
+      headers: {'Authorization': 'Token ' + window.token},
+      success:function(jqXHR) { 
+        alert("Successful! But check Data model first!");
+      },
+      contentType:"application/json",
+      type:"POST",
+      error:function(jqXHR) {
+        alert("Failure! Please check the message below:\n" + jqXHR.responseText);
+      }
+    });
+    
+    $("#data").val("");
+  });
+  
+  $("#reset").click(function() {
+    $("#server_api").removeAttr("disabled");
+    $("#study").removeAttr("disabled");
+    $("#username").removeAttr("disabled");
+    $("#password").removeAttr("disabled");
+    $("#verify").removeAttr("disabled");
+    $("#data").attr("disabled", "disabled");
+    $("#send").attr("disabled", "disabled");
+    
+    $("#server_api").val("");
+    $("#study").val("");
+    $("#username").val("");
+    $("#password").val("");
+    $("#data").val("");
+    
+    window.token = 0;
+    window.study = "";
+  });
+});
+
+
+</script>
+</html>
