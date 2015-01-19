@@ -20,7 +20,7 @@ class StudyAdmin(admin.ModelAdmin):
 	fieldsets = [
 		(None, {
 				'classes': ('suit-tab suit-tab-general',),
-				'fields': ['name', 'description', 'consent',
+				'fields': ['name', 'api_name', 'description', 'consent',
 				'instructions', 'eligibility', 'reward', 'start_date',
 				'end_date', 'investigators',]
 			}),

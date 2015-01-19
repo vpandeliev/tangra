@@ -4,9 +4,10 @@ from models import Study, Note
 class StudyForm(ModelForm):
 	class Meta:
 		model = Study
-		fields = ['name', 'description', 'consent', 'instructions', 'eligibility', 'reward']
+		fields = ['name', 'api_name', 'description', 'consent', 'instructions', 'eligibility', 'reward']
 		widgets = {
             'name': Textarea(attrs={'cols': 80, 'rows': 1}),
+	    'api_name': Textarea(attrs={'cols': 80, 'rows': 1}),
             'description': Textarea(attrs={'cols': 80, 'rows': 5}),
             'consent': Textarea(attrs={'cols': 80, 'rows': 5}),
             'instructions': Textarea(attrs={'cols': 80, 'rows': 5}),

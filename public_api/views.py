@@ -1,6 +1,5 @@
 """
 view.py
-
 This file contains the code for the public API.
 """
 
@@ -10,9 +9,10 @@ from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
-from serializers import *
 from rest_framework import status
 from django.utils import timezone
+from studies.models import *
+from django.core.exceptions import *
 
 
 class PublicAPIView(APIView):
@@ -59,16 +59,16 @@ class PublicAPIView(APIView):
 		
 		if c > 0:
 		    t = Token.objects.get(user=request.user)
-		    return Response({"token":str(t)}, status=status.HTTP_200_OK)
+		    return Response({"token":str(t), "defail":"success"}, status=status.HTTP_200_OK)
 		else:
 		    t = Token.objects.create(user=request.user)
 		    return Response({"token":str(t)}, status=status.HTTP_201_CREATED)
 	    else:
-		return Response({"error" : "Bad request", 
+		return Response({"detail" : "Bad request", 
 		                 "data": str(request.GET)}, 
 		                status=status.HTTP_400_BAD_REQUEST)
 	except Exception as e:
-	    return Response({"error" : str(e)}, status=status.HTTP_400_BAD_REQUEST) 
+	    return Response({"detail" : str(e), "data":str(request.GET)}, status=status.HTTP_400_BAD_REQUEST) 
 
     def post(self, request, format=None):
         """
@@ -84,12 +84,12 @@ class PublicAPIView(APIView):
         """
         
         try:
-	    from studies.models import UserStage
+	    
 		
 	    """
 	    Note that the data sent via POST must be a JSON and it must follow
 	    this format:
-	    - user_stage: an integer
+	    - study: the study's API name.
 	    - timestamp: a datetime string following the format of YYYY-MM-DD HH:MM:SS.
 	      It can also be "now" which uses the time when the server receives
 	      the data instead.
@@ -104,10 +104,8 @@ class PublicAPIView(APIView):
 		    t = request.DATA["timestamp"]
 	    
 	    # Get the user stage and make sure that the user is allowed to access it.
-	    us = UserStage.objects.get(id=int(request.DATA["user_stage"]))
-
-	    if us.user != request.user:
-		raise Exception("The request's user and the user stage's user do not match.")
+	    study = Study.objects.get(api_name=request.DATA["study"])
+	    us = UserStage.objects.get(group_stage__stage__study=study, user=request.user, status=1)
 	    
 	    # Finally create a new data.
 	    new_data = Data.objects.create(user=request.user,
@@ -116,6 +114,8 @@ class PublicAPIView(APIView):
 	                                   datum=request.DATA['datum'])
 	    
 	    # Return the JSON string message.
-	    return Response({"success" : "Data successfully added"}, status=status.HTTP_201_CREATED)
+	    return Response({"detail" : "success"}, status=status.HTTP_201_CREATED)
+        except ObjectDoesNotExist:
+	    return Response({"detail" : "User is not registered for this study or the study doesn't exist."}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            return Response({"error" : str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"detail" : str(e)}, status=status.HTTP_400_BAD_REQUEST)

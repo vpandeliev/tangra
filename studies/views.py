@@ -8,9 +8,11 @@ from models import *
 @login_required
 def show_active_studies(request):
 	"""	Display all active stages that the user currently has. """
+	
 	# Assumes that there is one active stage per study
 	# (Otherwise it would display duplicate studies in the list)
 	# TODO: Instead use this to return a list of studies
+	
 	current_stages = UserStage.get_active_stages(request.user)
 	investigator_studies = Study.objects.filter(investigators=request.user)
 	groups = {}
@@ -21,6 +23,7 @@ def show_active_studies(request):
 @login_required
 def show_study(request, study_id):
 	"""	Display the study with id 'study_id'. """
+	
 	request.session['study_id'] = study_id
 	study = Study.objects.get(id=study_id)
 
@@ -38,6 +41,7 @@ def show_study(request, study_id):
 def show_stage(request, study_id, stage_number):
 	""" Display the stage_number'th stage of study with ID 's_id', for the
 		participant who sent the request. """
+	
 	request.session['study_id'] = study_id
 	study = Study.objects.get(id=study_id)
 

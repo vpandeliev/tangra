@@ -7,7 +7,9 @@ from django.db.models import Q
 
 class Study(models.Model):
 	"""	A Study contains all of the general data associated with a study. """
+	
 	name = models.CharField('Study Name', max_length=300)
+	api_name = models.CharField('API Name', max_length=300) 
 	description = models.CharField('Description', max_length=5000, blank=True, null=True)
 	consent = models.CharField('Informed Consent Form', max_length=5000, blank=True, null=True)
 	instructions = models.CharField('Study Instructions', max_length=5000, blank=True, null=True)
@@ -39,6 +41,7 @@ class Stage(models.Model):
 	"""	A Stage contains all of the general data associated with a stage.
 	Once researchers create a Study they can create stages that users/groups
 	will have to complete (in a particular order). """
+	
 	study = models.ForeignKey(Study)
 	name = models.CharField('Stage Name', max_length=300)
 	description = models.CharField('Stage Description', max_length=5000)
@@ -54,6 +57,7 @@ class Group(models.Model):
 	"""	A Group contains a list of users contained within the group. It also
 	has a list of stages (stored as GroupStage entries) that the users of
 	the group will have to complete. """
+	
 	name = models.CharField('Group name', max_length=300)
 	study = models.ForeignKey(Study)
 	users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='users')
@@ -65,6 +69,7 @@ class Group(models.Model):
 
 class GroupStage(models.Model):
 	"""	A GroupStage object contains additional Stage data shared by a Group."""
+	
 	group = models.ForeignKey(Group)
 	stage = models.ForeignKey(Stage)
 	order = models.PositiveIntegerField()
@@ -76,6 +81,7 @@ class GroupStage(models.Model):
 class UserStage(models.Model):
 	"""	A UserStage contains additional Stage data specific to an individual
 	participant. """
+	
 	user = models.ForeignKey(settings.AUTH_USER_MODEL)
 	group_stage = models.ForeignKey(GroupStage)
 
