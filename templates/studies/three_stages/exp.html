@@ -1,0 +1,24 @@
+{% extends 'base_stage.html' %}
+
+{% block pre_form %}
+<h3>Complete the questionnaire below!</h3>
+{% endblock %}
+
+{% block form %}
+<div class="form-group">
+    <label>Name:</label> <input class="form-contrl" type="text" name="name" />
+</div>
+<div class="form-group">
+    <label>Last Name:</label> <input class="form-contrl" type="text" name="last_name" />
+</div>
+<div class="form-group">
+    <label>Favourite Animal:</label> <input class="form-contrl" type="text" name="fav_animal" /> <br/>
+</div>
+<div class="form-group">
+    <label>Are you a Belieber?</label>
+    <div class="radiobox">
+        <input type="radio" name="belieber" value="y">Yes<br/>
+        <input type="radio" name="belieber" value="n">No<br/>
+    </div>
+</div>
+{% endblock %}

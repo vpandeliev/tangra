@@ -95,7 +95,6 @@ class UserStage(models.Model):
 	start_date = models.DateTimeField(blank=True, null=True)
 	end_date = models.DateTimeField(blank=True, null=True)
 
-
 	def __unicode__(self):
 		return unicode("User: %s | Stage: %s (%s)" %
 			(self.user, self.group_stage.stage.name, UserStage.CHOICES[self.status][1]))
@@ -130,6 +129,12 @@ class UserStage(models.Model):
 			return False
 
 		return timezone.now() > deadline
+	
+	def is_available(self):
+		""" Return True if the stage is available. Otherwise, False."""
+		
+		return self.available == None or timezone.now() >= self.available
+			
 
 
 	def complete_stage(self):
@@ -167,6 +172,20 @@ class UserStage(models.Model):
 			active_stages = active_stages.filter(group_stage__stage__study=study)
 
 		return active_stages
+
+
+def get_next_user_stage(user, study):
+	""" Get the next user stage. """
+	
+	us = UserStage.objects.filter(user=user, group_stage__stage__study=study).order_by('group_stage__order')
+	
+	for s in us.all():
+		if s.status != 0:
+			print str(s)
+			return s
+		
+	return None
+		
 
 
 class Data(models.Model):

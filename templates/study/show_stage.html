@@ -100,7 +100,12 @@
 					<button type="button" class="btn btn-lg btn-default" disabled>Future stage</button>
 				{% elif cur_stage.status == 1 %}
 					<!-- Active stage -->
-					<a href="{{cur_stage.group_stage.stage.url}}/{{cur_stage.id}}" class="btn btn-lg btn-success">Click to start session</a>
+					{% if cur_stage.is_available %}
+						<a href="/studies/{{study.api_name}}/{{cur_stage.group_stage.stage.url}}/" class="btn btn-lg btn-success">Click to start session</a>
+					{% else %}
+						<p>Please wait until:</p>
+						<button type="button" class="btn btn-lg btn-default" disabled>{{ cur_stage.available }}</button>
+					{% endif %}
 				{% else %}
 					<!-- Past stage -->
 					<button type="button" class="btn btn-lg btn-default" disabled>Completed stage</button>

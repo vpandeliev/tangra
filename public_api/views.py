@@ -113,6 +113,16 @@ class PublicAPIView(APIView):
 	                                   user_stage=us,
 	                                   datum=request.DATA['datum'])
 	    
+	    # Check out for complete signal.
+	    
+	    if request.DATA.has_key("completed"):
+		us.complete_stage()
+		next_us = get_next_user_stage(request.user, study)
+				
+		if next_us != None:
+		    next_us.start_stage()
+
+	    
 	    # Return the JSON string message.
 	    return Response({"detail" : "success"}, status=status.HTTP_201_CREATED)
         except ObjectDoesNotExist:
