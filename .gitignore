@@ -1,4 +1,6 @@
-*.pyc
-*.sqlite3
-studies/migrations
-custom_auth/migrations
+# Gitignore temporarily suppressed.
+
+#*.pyc
+#*.sqlite3
+#studies/migrations
+#custom_auth/migrations
