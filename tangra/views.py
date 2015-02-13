@@ -8,6 +8,7 @@ from django.contrib import auth
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from rest_framework.authtoken.models import Token
+import json
 
 from rest_framework import authentication, permissions
 
@@ -95,7 +96,6 @@ def get_token(request):
 		else:
 			t = Token.objects.create(user=request.user)
 		
-		return render(request, TEMPLATE_TOKEN,
-		       {"token":t})
+		return HttpResponse(json.dumps({"token":str(t)}))
 	else:
-		return render(request, TEMPLATE_TOKEN, {"token":"N/A"})
+		return HttpResponse(json.dumps({"token":""}))

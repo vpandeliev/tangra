@@ -3,6 +3,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils import timezone
 from models import *
 import json
@@ -79,6 +80,21 @@ def render_stage(request, study_api_name, stage_url):
 	                                   user=request.user, status=1, 
 	                                   group_stage__stage=stage)
 	
+	token = ""
+	
+	# Baking the token to be used; lest the page wants to use a bit more hacky method.
+	from rest_framework.authtoken.models import Token
+	
+					
+	c = Token.objects.filter(user=request.user).count()
+			
+	# In this portal, a new token is made if a user has no token.
+			
+	if c > 0:
+		token = str(Token.objects.get(user=request.user))
+	else:
+		token = str(Token.objects.create(user=request.user))
+	
 	if not user_stage.is_available():
 		raise Exception('Be patient my friend for good things come to those who wait.')
 	
@@ -98,14 +114,14 @@ def submit_stage(request, study_api_name, stage_url):
 		for k in request.POST:
 			if k != 'csrfmiddlewaretoken':
 				clean_dict[k] = request.POST[k]
-		
-		new_data = Data.objects.create(user=request.user,
+				
+		if len(clean_dict) > 0: # This condition cull blank data.
+			new_data = Data.objects.create(user=request.user,
 	                               timestamp=str(timezone.now()),
 	                               user_stage=us,
 	                               datum=json.dumps(clean_dict))
 		
-		
-
+	
 		us.complete_stage()
 		next_us = get_next_user_stage(request.user, study)
 		

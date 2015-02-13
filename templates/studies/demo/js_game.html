@@ -1,0 +1,121 @@
+
+{% extends 'base_stage_ajax.html' %}
+
+{% block head %}
+
+<script>
+    mouseX = 0;
+    mouseY = 0;
+        
+    obj_1Clicked = false;
+    obj_2Clicked = false;
+    obj_3Clicked = false;
+    obj_4Clicked = false;
+    obj_5Clicked = false;
+
+    function apiContact() {
+        $.ajax({
+            // Your server's URL
+            async:true,
+            url:"http://127.0.0.1:8000/api/",
+
+            // Required! If you do not have these part, the API will fail.
+            type:"POST",
+            contentType:"application/json",
+            headers: {'Authorization': 'Token ' + '{{ token }}'},         
+            
+            data: JSON.stringify({ "datum":{"x":mouseX, "y":mouseY},
+                                   "study":"demo",
+                                   "timestamp":"now"}),
+                
+            // Display the error message.
+            error: function(jqXHR) {
+                alert(jqXHR.responseText);
+            },
+        });
+    }
+        
+    function mouseMove(e) {
+        mouseX = e.pageX - $("#bg").offset().left;
+        mouseY = e.pageY - $("#bg").offset().top;
+    }
+        
+    function obj_1Click() {
+        if (!obj_1Clicked) {
+            $("#obj_1").css("background-color", "pink");
+            obj_1Clicked = true;
+            end_game();
+        } else {
+            alert("You've already visited me!");
+        }
+    }
+        
+    function obj_2Click() {
+        if (!obj_2Clicked) {
+            $("#obj_2").css("background-color", "pink");
+            obj_2Clicked = true;
+            end_game();
+        } else {
+            alert("You've already visited me!");
+        }
+    }
+        
+    function obj_3Click() {
+        if (!obj_3Clicked) {
+            $("#obj_3").css("background-color", "pink");
+            obj_3Clicked = true;
+            end_game();
+        } else {
+            alert("You've already visited me!");
+        }
+    }
+        
+    function obj_4Click() {
+        if (!obj_4Clicked) {
+            $("#obj_4").css("background-color", "pink");
+            obj_4Clicked = true;
+            end_game();
+        } else {
+            alert("You've already visited me!");
+        }
+    }
+        
+    function obj_5Click() {
+        if (!obj_5Clicked) {
+            $("#obj_5").css("background-color", "pink");
+            obj_5Clicked = true;
+            end_game();
+        } else {
+            alert("You've already visited me!");
+        }
+    }
+        
+    function end_game() {
+        if (obj_1Clicked && obj_2Clicked && obj_3Clicked && obj_4Clicked && obj_5Clicked) {
+            submit();
+        }
+    }
+    
+    setInterval(apiContact, 1000);
+</script>
+{% endblock %}
+
+{% block content %}
+<h3>Click on all 5 green boxes.</h3>
+<br/>
+<div id="bg" style="height:400px; width:500px; background-color:black" onmousemove="mouseMove(event)">
+    <div id="obj_1" style="height:50px; width:50px; background-color:lime; position:relative; left:400px; top:200px"
+        onclick="obj_1Click()"></div>
+    <div id="obj_2" style="height:50px; width:50px; background-color:lime; position:relative; left:100px; top:156px"
+        onclick="obj_2Click()"></div>
+    <div id="obj_3" style="height:50px; width:50px; background-color:lime; position:relative; left:285px; top:221px"
+        onclick="obj_3Click()"></div>
+    <div id="obj_4" style="height:50px; width:50px; background-color:lime; position:relative; left:300px; top:100px"
+        onclick="obj_4Click()"></div>
+    <div id="obj_5" style="height:50px; width:50px; background-color:lime; position:relative; left:102px; top:-100px"
+        onclick="obj_5Click()"></div>
+</div>
+<br/>
+{% endblock %}
+
+
