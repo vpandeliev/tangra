@@ -12,6 +12,7 @@ from rest_framework import authentication, permissions
 from rest_framework import status
 from django.utils import timezone
 from studies.models import *
+from studies.views import *
 from django.core.exceptions import *
 
 
@@ -97,7 +98,6 @@ class PublicAPIView(APIView):
 	    """
 	    
 	    # Set up the date.
-	    
 	    t = str(timezone.now())
 	    if request.DATA.has_key("timestamp"):
 		if request.DATA["timestamp"] != "now":
@@ -105,7 +105,9 @@ class PublicAPIView(APIView):
 	    
 	    # Get the user stage and make sure that the user is allowed to access it.
 	    study = Study.objects.get(api_name=request.DATA["study"])
-	    us = UserStage.objects.get(group_stage__stage__study=study, user=request.user, status=1)
+	    us = UserStage.objects.get(group_stage__stage__study=study,
+	                               group_stage__stage__url=request.DATA["stage"],
+	                               user=request.user, status=1)
 	    
 	    # Finally create a new data.
 	    new_data = Data.objects.create(user=request.user,
@@ -116,6 +118,7 @@ class PublicAPIView(APIView):
 	    # Check out for complete signal.
 	    
 	    if request.DATA.has_key("completed"):
+		print(request.DATA["completed"])
 		us.complete_stage()
 		next_us = get_next_user_stage(request.user, study)
 				

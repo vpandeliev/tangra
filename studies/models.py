@@ -84,17 +84,18 @@ class UserStage(models.Model):
 	
 	user = models.ForeignKey(settings.AUTH_USER_MODEL)
 	group_stage = models.ForeignKey(GroupStage)
+	
 
 	CHOICES = ((0, 'Completed'), (1, 'Active'), (2, 'Future'))
 	status = models.IntegerField(max_length=1, choices=CHOICES, default=2)
 
 	# The date and time this stage can become available
-	available = models.DateTimeField(blank=True, null=True)
+	available = models.DateTimeField(blank=True, null=True, default=timezone.now())
 
 	# The dates the user started and finished this stage
 	start_date = models.DateTimeField(blank=True, null=True)
 	end_date = models.DateTimeField(blank=True, null=True)
-
+	
 	def __unicode__(self):
 		return unicode("User: %s | Stage: %s (%s)" %
 			(self.user, self.group_stage.stage.name, UserStage.CHOICES[self.status][1]))
@@ -150,6 +151,12 @@ class UserStage(models.Model):
 		# Set availability???
 		self.start_date = datetime.datetime.now()
 		self.save()
+		
+	def save(self, *args, **kwargs):
+		if not self.pk:
+			if self.group_stage.order == 0:
+				self.status = 1
+		super(UserStage, self).save(*args, **kwargs)
 
 
 	@staticmethod
