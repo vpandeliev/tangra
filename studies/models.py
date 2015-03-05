@@ -135,21 +135,18 @@ class UserStage(models.Model):
 		""" Return True if the stage is available. Otherwise, False."""
 		
 		return self.available == None or timezone.now() >= self.available
-			
-
-
+		
 	def complete_stage(self):
 		""" Complete the user stage. """
 		self.status = 0
-		self.end_date = datetime.datetime.now()
+		self.end_date = timezone.now()
 		self.save()
 
 
 	def start_stage(self):
 		""" Start the user stage. """
 		self.status = 1
-		# Set availability???
-		self.start_date = datetime.datetime.now()
+		self.start_date = timezone.now()
 		self.save()
 		
 	def save(self, *args, **kwargs):
@@ -188,11 +185,9 @@ def get_next_user_stage(user, study):
 	
 	for s in us.all():
 		if s.status != 0:
-			print str(s)
 			return s
 		
 	return None
-		
 
 
 class Data(models.Model):

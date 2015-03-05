@@ -16,11 +16,15 @@ def show_active_studies(request):
 	# (Otherwise it would display duplicate studies in the list)
 	# TODO: Instead use this to return a list of studies
 	
+	# Getting stages from the user.
 	current_stages = UserStage.get_active_stages(request.user)
-	investigator_studies = Study.objects.filter(investigators=request.user)
+	
+	# Generating other local variable.
+	investigator_studies = Study.objects.filter(investigators=request.user)	
 	groups = {}
 	for study in investigator_studies:
 		groups[study.id] = Group.objects.filter(study=study)
+
 	return render_to_response('study/show_active_studies.html', locals(), context_instance=RequestContext(request))
 
 @login_required
@@ -61,8 +65,7 @@ def show_stage(request, study_id, stage_number):
 		cur_stage = UserStage.objects.get(
 			user=request.user,
 			group_stage__stage__study=study,
-			group_stage__order=stage_number
-		)
+			group_stage__order=stage_number)
 	except:
 		return HttpResponseRedirect(reverse('studies:active_studies'))
 
@@ -74,15 +77,18 @@ def render_stage(request, study_api_name, stage_url):
 	"""
 	
 	# Hack Barrier. If anyone tries to access the study improperly, errors ensue!
-	study = Study.objects.get(api_name=study_api_name)
-	stage = Stage.objects.get(url=stage_url)
-	user_stage = UserStage.objects.get(group_stage__stage__study=study, 
-	                                   user=request.user, status=1, 
-	                                   group_stage__stage=stage)
+	try:
+		study = Study.objects.get(api_name=study_api_name)
+		stage = Stage.objects.get(url=stage_url)
+		user_stage = UserStage.objects.get(group_stage__stage__study=study, 
+			                           user=request.user, status=1, 
+			                           group_stage__stage=stage)
+	except:
+		return HttpResponseRedirect(reverse('studies:active_studies')) 
 	
 	token = ""
 	
-	# Baking the token to be used; lest the page wants to use a bit more hacky method.
+	# Baking the token to be used.
 	from rest_framework.authtoken.models import Token
 	
 					
@@ -96,7 +102,7 @@ def render_stage(request, study_api_name, stage_url):
 		token = str(Token.objects.create(user=request.user))
 	
 	if not user_stage.is_available():
-		raise Exception('Be patient my friend for good things come to those who wait.')
+		return HttpResponseRedirect(reverse('studies:active_studies'))
 	
 	return render_to_response('studies/' + study_api_name + '/' + stage_url + '.html', locals(), context_instance=RequestContext(request))
 
