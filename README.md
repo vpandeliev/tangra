@@ -1,3 +1,8 @@
+duration branch
+===============
+
+This branch involves model changes regarding the duration fields. It involves creating new Integer fields for time duration and tries to standardize all existing durations.
+
 Tangra 3.0
 ======
 
