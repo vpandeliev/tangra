@@ -100,11 +100,25 @@ def render_stage(request, study_api_name, stage_url):
 		token = str(Token.objects.get(user=request.user))
 	else:
 		token = str(Token.objects.create(user=request.user))
+		
+	# Setting up time variables.
+	if user_stage.start_date == None:
+		user_stage.start_date = timezone.now()
+		user_stage.save()
+		
+	min_duration_over = user_stage.min_duration_over()
+	wait_duration = user_stage.get_wait_duration()
+	wait_duration_millisecond = wait_duration.total_seconds() * 1000;
+	wait_until = user_stage.get_wait_until()
 	
+	# Redirect if the stage is unavailable.
 	if not user_stage.is_available():
 		return HttpResponseRedirect(reverse('studies:active_studies'))
 	
-	return render_to_response('studies/' + study_api_name + '/' + stage_url + '.html', locals(), context_instance=RequestContext(request))
+	return render_to_response('studies/' + study_api_name + '/' + \
+	                          stage_url + '.html', 
+	                          locals(), 
+	                          context_instance=RequestContext(request))
 
 @login_required
 def submit_stage(request, study_api_name, stage_url):

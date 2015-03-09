@@ -25,13 +25,13 @@ class Study(models.Model):
 		return u'%s' % (self.name)
 
 	def has_started(self):
-		if self.start_date is not None and datetime.datetime.now().date() >= self.start_date:
+		if self.start_date is not None and timezone.now().date() >= self.start_date:
 			# The start date has already passed
 			return True
 		return False
 
 	def has_ended(self):
-		if self.end_date is not None and datetime.datetime.now().date() >= self.end_date:
+		if self.end_date is not None and timezone.now().date() >= self.end_date:
 			# The end date has already passed
 			return True
 		return False
@@ -48,6 +48,7 @@ class Stage(models.Model):
 	instructions = models.CharField('Stage Instructions', max_length=5000)
 	deadline = models.IntegerField('Time to finish session (in days)', blank=True, null=True)
 	url = models.CharField('Stage URL', max_length=300)
+	min_duration = models.IntegerField('Minimum duration before proceeding to next stage (in seconds)', default=0)
 
 	def __unicode__(self):
 		return unicode("%s: %s" % (self.study.name, self.name))
@@ -100,6 +101,25 @@ class UserStage(models.Model):
 		return unicode("User: %s | Stage: %s (%s)" %
 			(self.user, self.group_stage.stage.name, UserStage.CHOICES[self.status][1]))
 
+	def min_duration_over(self):
+		""" Return True if the minimum duration in the stage has passed.
+		Otherwise return False."""
+		
+		return self.start_date + datetime.timedelta(seconds= \
+		       self.group_stage.stage.min_duration) <= timezone.now()
+	
+	def get_wait_duration(self):
+		""" Return the remaining time before the advancement can begin. """
+		
+		return self.start_date + datetime.timedelta(seconds= \
+		       self.group_stage.stage.min_duration) - timezone.now()
+	
+	def get_wait_until(self):
+		""" Return the time when the stage can be advanced. """
+		
+		return self.start_date + datetime.timedelta(seconds= \
+		       self.group_stage.stage.min_duration)
+		
 
 	def get_deadline(self):
 		"""	Return the date/time of the deadline for this stage.
