@@ -59,7 +59,7 @@
 		{% block pre_form %} {% endblock %}
 		
 		<div>
-			<form action="submit/" method="post">
+			<form action="submit/" method="post" {% block form_attr %}{% endblock %} >
 				{% csrf_token %} {% block form %} {% endblock %}
 				{% if min_duration_over %}
 					<input type="submit" value="Continue"/>

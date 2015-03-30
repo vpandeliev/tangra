@@ -79,13 +79,12 @@ def render_stage(request, study_api_name, stage_url):
 	# Hack Barrier. If anyone tries to access the study improperly, errors ensue!
 	try:
 		study = Study.objects.get(api_name=study_api_name)
-		stage = Stage.objects.get(url=stage_url)
+		stage = Stage.objects.get(url=stage_url, study=study)
 		user_stage = UserStage.objects.get(group_stage__stage__study=study, 
 			                           user=request.user, status=1, 
 			                           group_stage__stage=stage)
 	except:
-		return HttpResponseRedirect(reverse('studies:active_studies')) 
-	
+		return HttpResponseRedirect(reverse('studies:active_studies'))
 	token = ""
 	
 	# Baking the token to be used.

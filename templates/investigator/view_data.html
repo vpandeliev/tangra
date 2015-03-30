@@ -1,0 +1,52 @@
+{% extends 'dashboard.html' %}
+
+{% block title %}View Data{% endblock %}
+
+{% block head %}
+  {% load staticfiles %}
+  <link href="{% static 'css/investigator/dashboard.css' %}" rel="stylesheet"/>
+  <script src="{% static 'js/lib/sorttable.js' %}"></script>
+{% endblock %}
+
+{% block nav %}
+<ul class="nav nav-sidebar">
+  <li><a href="{% url 'studies:investigator:study' study_id %}">Overview</a></li>
+  <li><a href="{% url 'studies:investigator:details' study_id %}">Study Details</a></li>
+  <li><a href="{% url 'studies:investigator:email_all' study_id %}">Email participants</a></li>
+  <li class="active"><a href="#">View Data</a></li>
+  <li><a href="{% url 'studies:investigator:export' study_id %}">Export Data</a></li>
+  
+</ul>
+{% endblock %}
+
+{% block page-title %}{{study.name}}: View Data{% endblock %}
+
+{% block page-content %}
+
+<h2>Currently under construction!</h2>
+
+<table class="sortable table">
+  <tr>
+    <th>Time Received</th> <th>User</th> <th>Stage</th> <th>Data</th>
+  </tr>
+  <tr>
+    <td>14/12/06</td> <td>Lady Gaga</td> <td>Pretest</td> <td>AEIOU</td>
+  </tr>
+  <tr>
+    <td>15/12/06</td> <td>Alpha Trax</td> <td>Ending</td> <td>Maximality</td>
+  </tr>
+  
+  {% for d in render_data %}
+    <tr>
+      <td sorttable_customkey="{{ d.custom_timestamp_key }}">
+        {{ d.timestamp }}
+      </td>
+      <td>{{ d.username }}</td>
+      <td>({{ d.stage_order }}) {{ d.stage_name }}</td>
+      <td>{{ d.datum }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+
+{% endblock %}

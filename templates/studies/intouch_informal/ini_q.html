@@ -1,0 +1,45 @@
+{% extends 'base_stage.html' %}
+
+{% block pre_form %}
+<h1>Initial Questionnaire</h1>
+{% endblock %}
+
+<h2>Please complete the questionnaire below.</h2>
+
+{% block form %}
+<div class="form-group">
+    <label>The user of InTouch will be: </label>
+    <div class="radiobox">
+        <input type="radio" name="user_type" value="very_high">Me<br/>
+        <input type="radio" name="user_type" value="father">My father<br/>
+        <input type="radio" name="user_type" value="mother">My mother<br/>
+        <input type="radio" name="user_type" value="grandfather">My grandfather<br/>
+        <input type="radio" name="user_type" value="grandmother">My grandmother<br/>
+        <input type="radio" name="user_type" value="relative">(Other) Relative<br/>
+        <input type="radio" name="user_type" value="non-relative">(Ohter) Non-relative<br/>
+    </div>
+</div>
+<div class="form-group">
+    <label>The age of the user is</label> <input class="form-contrl" type="number" name="age" />
+</div>
+<div class="form-group">
+    <label>The user's overall proficiency on computers and tablets is:</label>
+     <div class="radiobox">
+        <input type="radio" name="tech_proficiency" value="very_high">Very High<br/>
+        <input type="radio" name="tech_proficiency" value="high">High<br/>
+        <input type="radio" name="tech_proficiency" value="moderate">Moderate<br/>
+        <input type="radio" name="tech_proficiency" value="low">Low<br/>
+        <input type="radio" name="tech_proficiency" value="very_low">Very Low<br/>
+    </div>
+</div>
+<div class="form-group">
+    <label>The user's overall proficiency on mobile phones is:</label>
+     <div class="radiobox">
+        <input type="radio" name="phone_proficiency" value="very_high">Very High<br/>
+        <input type="radio" name="phone_proficiency" value="high">High<br/>
+        <input type="radio" name="phone_proficiency" value="moderate">Moderate<br/>
+        <input type="radio" name="phone_proficiency" value="low">Low<br/>
+        <input type="radio" name="phone_proficiency" value="very_low">Very Low<br/>
+    </div>
+</div>
+{% endblock %}

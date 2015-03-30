@@ -5,63 +5,56 @@
 {% block head %}
 	{% load staticfiles %}
 	<link href="{% static 'css/participant/offcanvas.css' %}" rel="stylesheet">
+	<style>
+	.stage_name {
+		overflow: hidden;
+	}
+	</style>
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
 
-	<h1 style="font-size:50px">{{cur_stage.group_stage.stage.study.name}}</h1>
+	<p><h1 style="font-size:50px">
+		{{cur_stage.group_stage.stage.study.name}}
+		<span class="glyphicon glyphicon-info-sign" style="font-size:30px"></span>
+	</h1><p>
 
 	<br>
-	
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>                        
-				</button>
-				<p class="navbar-text hidden-sm hidden-md hidden-lg" style="color:white; font-size:large; margin-left:20px">Stages</p>
-			</div>
-			<div class="collapse navbar-collapse" id="myNavbar">
-				<ul class="nav navbar-nav">
-				{% for stage in stages %}
-					{% if stage.status > 1 %}
-					<!-- Future stage -->
-					<li {% if stage.id = cur_stage.id %} class="active" {% endif %} >
-						<a href="{% url 'studies:stage' study.id stage.group_stage.order %}" style="color:#00FFFF">
-							<span class="glyphicon glyphicon-minus-sign" style="dipslay:inline-block; "></span>
-							<span> <!--class="hidden-sm hidden-md hidden-lg"-->{{ stage.group_stage.stage.name }}</span>
-						</a>
-					</li>
-					{% elif stage.status == 1 %}
-					<!-- Active stage -->
-					<li {% if stage.id = cur_stage.id %} class="active" {% endif %} >
-						<a href="{% url 'studies:stage' study.id stage.group_stage.order %}" style="color:#00FF00">
-							<span class="glyphicon glyphicon-time" style="dipslay:inline-block;" ></span>
-							<span>{{ stage.group_stage.stage.name }}</span>
-						</a>
-					</li>
-					{% else %}
-					<!-- Past stage -->
-					<li {% if stage.id = cur_stage.id %} class="active" {% endif %}>
-						<a href="{% url 'studies:stage' study.id stage.group_stage.order %}" style="color:grey">
-							<span class="glyphicon glyphicon-ok" style="dipslay:inline-block"></span>
-							<span> <!--class="hidden-sm hidden-md hidden-lg"-->{{ stage.group_stage.stage.name }}</span>
-						</a>
-					</li>
-					{% endif %}
-				{% endfor %}
-				</ul>
-			</div>
+
+	<div class="btn-group btn-group-justified" style="overflow:hidden" >
+		{% for stage in stages %}
+		<div class="btn-group btn-group-lg">
+			{% if stage.status > 1 %}
+				<!-- Future stage -->
+				<a type="button" href="{% url 'studies:stage' study.id stage.group_stage.order %}" style="color:#AAAAAA;"
+				{% if stage.id = cur_stage.id %} class="btn btn-info"
+				{% else %} class="btn btn-default"
+				{% endif %}>
+				<span class="glyphicon glyphicon-minus-sign" style="dipslay:inline-block"></span>
+			{% elif stage.status == 1 %}
+				<!-- Active stage -->
+				<a type="button" href="{% url 'studies:stage' study.id stage.group_stage.order %}"
+				{% if stage.id = cur_stage.id %} class="btn btn-info" style="dipslay:inline-block"
+				{% else %} class="btn btn-default"
+				{% endif %}>
+				<span class="glyphicon glyphicon-time"></span>
+			{% else %}
+				<!-- Past stage -->
+				<a type="button" href="{% url 'studies:stage' study.id stage.group_stage.order %}"
+				{% if stage.id = cur_stage.id %} class="btn btn-info" style="dipslay:inline-block"
+				{% else %} class="btn btn-default"
+				{% endif %}>
+				<span class="glyphicon glyphicon-ok"></span>
+			{% endif %}
+			<span>{{ stage.group_stage.stage.name }}</span>
+			</a>
 		</div>
-	</nav>
+		{% endfor %}
+	</div>
 
 	<br>
-	
-	
 
 	{% if cur_stage.is_overdue %}
 		<div class="alert alert-danger" role="alert">
@@ -129,7 +122,6 @@
 	</div>
 
 </div>
-
 
 
 {% endblock %}

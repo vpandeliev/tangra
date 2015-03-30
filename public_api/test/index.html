@@ -28,12 +28,15 @@
       <input id="server_api" type="text" />
       <h4>Study API Name:</h4>
       <input id="study" type="text" />
+      <h4>Stage URL:</h4>
+      <input id="stage" type="text" />
       <h4>Dummy User's Username:</h4>
       <input id="username" type="text" />
       <h4>Dummy User's Password:</h4>
       <input id="password" type="password" />
       <hr/>
       <input id="verify" type="button" value="Verify">
+      
       </form>
     </div>
     <div class="col-sm-4">
@@ -63,6 +66,7 @@
 <script>
 window.token = 0;
 window.study = "";
+window.stage = "";
 
 $(document).ready(function() {
   $("#data").attr("disabled", "disabled");
@@ -70,7 +74,8 @@ $(document).ready(function() {
 
   $("#verify").click(function() {
     var server_api = $("#server_api").val();
-    study = $("#study").val()
+    study = $("#study").val();
+    stage = $("#stage").val();
     var username = $("#username").val();
     var password = $("#password").val();
     
@@ -85,6 +90,7 @@ $(document).ready(function() {
                     
         $("#server_api").attr("disabled", "disabled");
         $("#study").attr("disabled", "disabled");
+        $("#stage").attr("disabled", "disabled");
         $("#username").attr("disabled", "disabled");
         $("#password").attr("disabled", "disabled");
         $("#verify").attr("disabled", "disabled");
@@ -101,7 +107,8 @@ $(document).ready(function() {
     $.ajax({
       async: false,
       data: JSON.stringify({'datum':$("#data").val(), 
-                            'study':window.study, 
+                            'study':window.study,
+                            'stage':window.stage,
                             'timestamp': 'now'}),
       url:"http://127.0.0.1:8000/api/",
       headers: {'Authorization': 'Token ' + window.token},
@@ -121,6 +128,7 @@ $(document).ready(function() {
   $("#reset").click(function() {
     $("#server_api").removeAttr("disabled");
     $("#study").removeAttr("disabled");
+    $("#stage").removeAttr("disabled");
     $("#username").removeAttr("disabled");
     $("#password").removeAttr("disabled");
     $("#verify").removeAttr("disabled");
@@ -129,12 +137,14 @@ $(document).ready(function() {
     
     $("#server_api").val("");
     $("#study").val("");
+    $("#stage").val("");
     $("#username").val("");
     $("#password").val("");
     $("#data").val("");
     
     window.token = 0;
     window.study = "";
+    window.stage = "";
   });
 });
 

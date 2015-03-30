@@ -1,0 +1,24 @@
+{% extends 'base_stage.html' %}
+
+{% block pre_form %}
+<h1>Final Questionnaire</h1>
+{% endblock %}
+
+<h2>Please complete the questionnaire below.</h2>
+
+{% block form_attr %}id="final"{% endblock %}
+{% block form %}
+<div class="form-group" >
+    <label>Overall, how was the user's (or your) experience?</label>
+    <div><textarea rows="4" cols="50" name="final_comment" form="final"></textarea></div>
+</div>
+<div class="form-group">
+    <label>What suggestions would you have to make the experience better?</label>
+    <div><textarea rows="4" cols="50" name="improvement_comment" form="final"></textarea></div>
+</div>
+<div class="form-group">
+    <label>Did the experience increase the user's connectedness to family and friends? If so, how so? If no, why not?
+    Please be expansive in your answer.</label>
+    <div><textarea rows="4" cols="50" name="connected_comment" form="final"></textarea></div>
+</div>
+{% endblock %}

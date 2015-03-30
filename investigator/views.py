@@ -304,6 +304,30 @@ def email_user(request, study_id, user_id):
 	form = EmailForm()
 	return render_to_response('investigator/email.html', locals(), context_instance=RequestContext(request))
 
+@login_required
+def view_data(request, study_id):
+	""" View the data. Currently only provides one table. """
+	
+	study = Study.objects.get(id=study_id)
+	data = Data.objects.filter(user_stage__group_stage__stage__study=study_id)
+	render_data = []
+	
+	for d in data:
+		render_data.append({
+		        "username": d.user.username,
+		        "stage_order": d.user_stage.group_stage.order,
+		        "stage_name": d.user_stage.group_stage.stage.name,
+		        "timestamp": d.timestamp,
+		        "custom_timestamp_key": d.timestamp.strftime('%Y%m%d%H%M%S'),
+		        "datum": d.datum
+		})
+	
+	# Must be an investigator in order to view. Otherwise, go back.
+	if not is_investigator(request.user, study):
+		return HttpResponseRedirect(reverse('studies:active_studies'))	
+	
+	return render_to_response('investigator/view_data.html', {"study_id":study_id, "study":study, "render_data":render_data}, context_instance=RequestContext(request))
+
 
 def export_as_csv(model, request, queryset, fields=None, exclude=None, header=True):
 	""" Generic CSV export action """

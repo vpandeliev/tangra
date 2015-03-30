@@ -17,6 +17,9 @@ urlpatterns = patterns('',
 
 	# View the details of the study (i.e., description, consent, etc.)
 	url(r'^(\d+)/details/$', study_details, name='details'),
+        
+        # View the data.
+        url(r'^(\d+)/view_data/$', view_data, name='view_data'),
 
 	# Export all of the study data
 	url(r'^(\d+)/export/$', export, name='export'),
