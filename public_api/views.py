@@ -44,7 +44,7 @@ class PublicAPIView(APIView):
 	- request: The user information and the data sent from the the user side.
 	
 	Return a response accompanying with HTTP code. If successful, a JSON 
-	with the token will be returned. The token can be obtained from the JSON.
+	with the token will be returned; simply access 'token' to obtain it.
 	In the case of failure, 'error' will be included in JSON and the
 	message can be read from there.
 	"""
@@ -71,10 +71,10 @@ class PublicAPIView(APIView):
 	except Exception as e:
 	    return Response({"detail" : str(e), "data":str(request.GET)}, status=status.HTTP_400_BAD_REQUEST) 
 
+
     def post(self, request, format=None):
         """
-        Support the POST method in the API. Currently it allows for a piece
-	of data to be sent to Data table.
+        Support the POST method in the API.
 	
 	- request: The user information and the data sent from the user side.
 	
@@ -116,7 +116,6 @@ class PublicAPIView(APIView):
 	                                   datum=request.DATA['datum'])
 	    
 	    # Check out for complete signal.
-	    
 	    if request.DATA.has_key("completed"):
 		print(request.DATA["completed"])
 		us.complete_stage()

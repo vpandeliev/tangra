@@ -14,7 +14,6 @@ def show_active_studies(request):
 	
 	# Assumes that there is one active stage per study
 	# (Otherwise it would display duplicate studies in the list)
-	# TODO: Instead use this to return a list of studies
 	
 	# Getting stages from the user.
 	current_stages = UserStage.get_active_stages(request.user)
@@ -73,8 +72,7 @@ def show_stage(request, study_id, stage_number):
 
 @login_required
 def render_stage(request, study_api_name, stage_url):
-	""" Render the stage on a stage template.
-	"""
+	""" Render the stage on a stage template. """
 	
 	# Hack Barrier. If anyone tries to access the study improperly, errors ensue!
 	try:
@@ -88,6 +86,7 @@ def render_stage(request, study_api_name, stage_url):
 	token = ""
 	
 	# Baking the token to be used.
+	# TODO: Replace this with Session Authentication system.
 	from rest_framework.authtoken.models import Token
 	
 					
