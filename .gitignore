@@ -1,4 +1,6 @@
-*.pyc
-*.sqlite3
-studies/migrations
-custom_auth/migrations
+# Migrate the studies anyways for the good of mankinds.
+
+#*.pyc
+#*.sqlite3
+#studies/migrations
+#custom_auth/migrations
