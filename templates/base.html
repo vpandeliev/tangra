@@ -2,45 +2,62 @@
 
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<title>{% block title %}{% endblock %}</title>
-				
-		<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" media="screen">
-		<link rel="stylesheet" type="text/css" href="{% static "css/tabs.css" %}" media="screen">
-		
-		<script type="text/javascript" src="{% static "js/jquery-1.7.2.min.js" %}" ></script>
-		<script type="text/javascript" src="{% static "js/main.js" %}" ></script>
-		<script type="text/javascript" src="{% static "js/tabs.js" %}" ></script>
-		<script type="text/javascript" src="{% static "js/timer.js" %}" ></script>
-	</head>
-	
-	<body>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="Technologies for Aging Gracefully Lab">
+	<link rel="icon" href="../../favicon.ico">
 
-    	<div id="modal_background" style="display:none;">
-    		<div id="modal_dialog"  style="display:none;">
-        		<div id="modal_body"></div>
-        		<button  onclick="close_modal();"> Close </button>
-        		<div class="clear"></div>
-      		</div>
-      		{% if user.is_authenticated %}
-      			{% include "messages.html" %}
-			{% endif%}
-    	</div>
-	
-		<div id="outer">
-			<div id="login_menu" class="supergrey">
-				<a href="/"><img id="logo" src="{% static 'img/tangra_logo.png' %}"/></a>
-				<div id="login_links">
-				{% if user.is_authenticated %}
-					Welcome, <a href="{% url 'studies:active_studies' %}">{{user.username}}</a> 
-					| <a href="{% url 'logout' %}">Logout</a>
-				{% else %}
-					Welcome to Tangra 2.0
-				{% endif%}
-				</div>
+	<title>{% block title %}{% endblock %} - Tangra</title>
+
+	<!-- Bootstrap core CSS -->
+	<link href="{% static 'dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+	<!-- Bootstrap theme -->
+	<link href="{% static 'dist/css/bootstrap-theme.min.css' %}" rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" href="{% static "css/base.css" %}" media="screen">
+	<link rel="stylesheet" type="text/css" href="{% static "css/tabs.css" %}" media="screen">
+
+	<!-- Pages can import new stylesheets / scripts here -->
+	{% block head %}{% endblock %}
+</head>
+
+<body style="padding:0; margin:0">
+
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-static-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="{% url 'home' %}">
+					<img src="{% static 'img/tangra_logo.png' %}" width="110px" height="30px" style="margin-top:-3px">
+				</a>
 			</div>
-			{% block content %}{% endblock %}
+			<div>
+				<ul class="nav navbar-nav navbar-right">
+					{% if user.is_authenticated %}
+					<li><a href="{% url 'studies:active_studies' %}"><span class="glyphicon glyphicon-user"> {{user.username|capfirst}}</a></li>
+					<li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-out"> Logout</a></li>
+					{% endif %}
+				</ul>
+			</div><!--/.nav-collapse -->
 		</div>
+	</div>
+
+	{% block content %}{% endblock %}
+
+		<!-- Bootstrap core JavaScript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="{% static 'dist/js/bootstrap.min.js' %}"></script>
+		<!--script src="../../assets/js/docs.min.js"></script-->
+		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+		<!--script src="../../assets/js/ie10-viewport-bug-workaround.js"></script-->
 		
+	{% block bodyscript %}{% endblock %}
+
 	</body>
 </html>

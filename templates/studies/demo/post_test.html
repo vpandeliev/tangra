@@ -1,0 +1,20 @@
+{% extends 'base_stage.html' %}
+
+{% block pre_form %}
+<h3>Complete the questionnaire below!</h3>
+{% endblock %}
+
+{% block form %}
+<div class="form-group">
+    <label>How many elephtants are there: </label> <input class="form-contrl" type="number" name="elephant_num" />
+</div>
+<hr/>
+<div class="form-group">
+    <label>Do you think you have found all elephants: </label> 
+    <div class="radiobox">
+        <input type="radio" name="found_all" value="yes">Yes<br/>
+        <input type="radio" name="found_all" value="no">No<br/>
+    </div>
+</div>
+<hr/>
+{% endblock %}

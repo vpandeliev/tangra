@@ -1,0 +1,14 @@
+{% extends 'base_stage.html' %}
+
+{% block pre_form %}
+<h1>Informed Consent</h1>
+
+<p>I agree to try the current version of InTouch, to cease using it 1 week after being asked, to provide my own iPad unless expressly loaned one by TAGlab, and to return any loaned iPad one week after being asked. I understand that the software is experimental, and may not always work as intended, but that TAGlab and famli.net personnel will do their best to respond to issues or problems that may occur. I understand that my data and usage will be logged, but not the content of messages that I send or receive. I understand that I will be asked a few questions now, and at the end of each week, and at the end of the usage.  I understand that I have the right to withdraw from this usage at any time. I understand that the user's experience may be summarized in research papers, but s/he will not be identified in any such publication.</p>
+
+<p>By clicking Continue, you agree to the above paragraph and consent to the experiment.</p>
+
+{% endblock %}
+
+{% block form %}
+	<input type="hidden" name="informed_consent" value="e-signature" />
+{% endblock %}

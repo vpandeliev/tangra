@@ -1,0 +1,37 @@
+{% extends 'dashboard.html' %}
+
+{% block title %}Export Data{% endblock %}
+
+{% block head %}
+  {% load staticfiles %}
+  <link href="{% static 'css/investigator/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block nav %}
+<ul class="nav nav-sidebar">
+  <li><a href="{% url 'studies:investigator:study' study_id %}">Overview</a></li>
+  <li><a href="{% url 'studies:investigator:details' study_id %}">Study Details</a></li>
+  <li><a href="{% url 'studies:investigator:email_all' study_id %}">Email participants</a></li>
+  <li><a href="{% url 'studies:investigator:view_data' study_id %}">View Data</a></li>
+  <li class="active"><a href="#">Export Data</a></li>
+</ul>
+{% endblock %}
+
+{% block page-title %}{{study.name}}: Export Data{% endblock %}
+
+{% block page-content %}
+
+<h2>Click the links to download the CSV tables</h2>
+
+<div class="list-group" style="width:500px">
+
+  {% for i in tables %}
+    <a href="{{forloop.counter}}" class="list-group-item">
+      {{forloop.counter}}. {{tables|get_item:forloop.counter}}
+      <span class="glyphicon glyphicon-save" style="float:right"></span>
+    </a>
+  {%endfor%}
+</div>
+
+
+{% endblock %}

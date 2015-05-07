@@ -1,0 +1,30 @@
+{% extends 'base_stage.html' %}
+
+{% block pre_form %}
+<h1>End-Of-Week Questionnaire</h1>
+{% endblock %}
+
+<h2>Please complete the questionnaire below.</h2>
+
+{% block form_attr %}id="reflection"{% endblock %}
+{% block form %}
+<div class="form-group" >
+    <label>How did the user (or yourself if you are the user) like InTouch?</label>
+    <div><textarea rows="4" cols="50" name="comment" form="reflection"></textarea></div>
+</div>
+<div class="form-group">
+    <label>What did the user particularly like?</label>
+    <div><textarea rows="4" cols="50" name="like" form="reflection"></textarea></div>
+</div>
+<div class="form-group">
+    <label>What did the user particularly dislike?</label>
+    <div><textarea rows="4" cols="50" name="dislike" form="reflection"></textarea></div>
+</div>
+<div class="form-group">
+    <label>Are there signs that InTouch is making the user (or your) family more connected? </label>
+    <div class="radiobox">
+        <input type="radio" name="connected" value="y">Yes<br/>
+        <input type="radio" name="connected" value="n">No<br/>
+    </div>
+</div>
+{% endblock %}

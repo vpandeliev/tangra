@@ -1,0 +1,192 @@
+{% extends 'dashboard.html' %}
+
+{% block title %}User{% endblock %}
+
+{% block head %}
+  {% load staticfiles %}
+  <link href="{% static 'css/investigator/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block nav %}
+<ul class="nav nav-sidebar">
+  <li><a href="{% url 'studies:investigator:study' study_id %}">Overview</a></li>
+  <li><a href="{% url 'studies:investigator:details' study_id %}">Study Details</a></li>
+  <li><a href="{% url 'studies:investigator:email_all' study_id %}">Email participants</a></li>
+  <li><a href="{% url 'studies:investigator:view_data' study_id %}">View Data</a></li>
+  <li><a href="{% url 'studies:investigator:export' study_id %}">Export Data</a></li>
+</ul>
+<hr>
+<ul class="nav nav-sidebar">
+  {% for stage in stages %}
+    <li {% if user_stage.id = stage.id %}class="active"{% endif %}>
+      <a href="{% url 'studies:investigator:user_stage' study_id user_id stage.group_stage.order %}">
+        {{stage.group_stage.stage.name|capfirst}}
+        {% if stage.is_overdue %}
+          <!-- Overdue stage -->
+          <span class="label label-danger" style="float:right">
+            <span class="glyphicon glyphicon-time"></span>
+          </span>
+        {% elif stage.status = 0 %}
+          <!-- Completed stage -->
+          <span class="label label-default" style="float:right">
+            <span class="glyphicon glyphicon-ok"></span>
+          </span>
+        {% elif stage.status = 1 %}
+          <!-- Active stage -->
+          <span class="label label-success" style="float:right">
+            <span class="glyphicon glyphicon-time"></span>
+          </span>
+        {% elif stage.status = 2 %}
+          <!-- Future stage -->
+          <span class="label label-info" style="float:right">
+            <span class="glyphicon glyphicon-minus-sign"></span>
+          </span>
+        {% endif %}
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
+
+{% block page-title %}
+
+{% endblock %}
+
+
+
+{% block page-content %}
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <h1 class="page-header">
+      {% if participant.gender = 0 %}
+        <img src="{% static 'img/female.png' %}" height="45px">
+      {% elif participant.gender = 1 %}
+        <img src="{% static 'img/male.png' %}" height="45px">
+      {% endif %}
+      {{participant.username|capfirst}}
+
+      <!-- Email user button -->
+      <a href="{% url 'studies:investigator:email_user' study_id user_id %}">
+        <button type="button" class="btn btn-default" style="margin-right:10px; float:right">
+          <span class="glyphicon glyphicon-envelope"></span>
+          Email {{participant.username|capfirst}}
+        </button>
+      </a>
+
+    </h1>
+    <!-- USER PROFILE -->
+    <h4>
+      <b>Age:</b> {{ participant.age }}<br>
+      <b>Gender:</b> {{ gender_choices|get_item:participant.gender }}
+    </h4>
+    <!-- END USER PROFILE -->
+  </div>
+</div>
+
+<!-- Advancing user button -->
+{% if user_stage.status != 0 %}
+<form action="{% url 'studies:investigator:advance_user' study_id user_id stage_number %}" method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-default" style="margin-right:10px; margin-top:10px; float:right">
+    <span class="glyphicon glyphicon-ok"></span> 
+    {% if user_stage.status == 1 %}Complete stage{% endif %}
+    {% if user_stage.status == 2 %}Start stage{% endif %}
+  </button>
+</form>
+{% endif %}
+
+<h2 style="margin-top:30px">
+  Stage {{stage_number}}: {{user_stage.group_stage.stage.name}}
+  {% if user_stage.is_overdue %}
+    <span class="label label-danger" style="font-size:15px; vertical-align:middle">Overdue!</span>
+  {% elif user_stage.status = 0 %}
+    <span class="label label-default" style="font-size:15px; vertical-align:middle">Done</span>
+  {% elif user_stage.status = 1 %}
+    <span class="label label-success" style="font-size:15px; vertical-align:middle">Active</span>
+  {% elif user_stage.status = 2 %}
+    <span class="label label-info" style="font-size:15px; vertical-align:middle">Future</span>
+  {% endif %}
+</h2>
+{{user_stage.group_stage.stage.description|safe}}
+
+
+<!-- BUTTONS --
+<button type="button" class="btn btn-default" style="margin-right:10px">
+  <span class="glyphicon glyphicon-paperclip"></span> Add File
+</button>
+
+<!--button type="button" class="btn btn-default">
+  <span class="glyphicon glyphicon-floppy-disk"></span> Add Data
+</button>
+<!-- END BUTTONS -->
+
+<br><br>
+
+<!-- DATA -->
+{% if data|length > 0 %}
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tbody>
+      {% for d in data %}
+      <tr>
+        <td>
+          <b>{{ d.user.username|capfirst }}:</b>
+          <p style="font-family:courier">{{ d.datum }}</p>
+          {% if d.attachment %}
+            Attachment: <a href="/files/{{d.attachment}}">{{d.attachment}}</a>
+          {% endif %}
+          <p style="font-size:10px; color=#eeeeee">{{ d.timestamp }}</p>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+<!-- END DATA -->
+
+
+<!-- NOTES -->
+<h2 class="sub-header">Notes</h2>
+<form enctype="multipart/form-data" action="{% url 'studies:investigator:note_user_stage' study_id user_id stage_number %}" method="post">
+  {% csrf_token %}
+  {{ note_form.datum }}
+  <br>
+  <table>
+    <tr>
+      <td width="70%">{{ note_form.attachment }}</td>
+      <td width="25%">{{ note_form.email }} Email investigators</td>
+      <td width="15%" align="right">
+        <button type="submit" class="btn btn-default" style="margin-right:10px">
+          <span class="glyphicon glyphicon-edit"></span> Add Note
+        </button>
+      </td>
+    </tr>
+  </table>
+  <br>
+</form>
+<br>
+{% if notes|length > 0 %}
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tbody>
+      {% for note in notes %}
+      <tr>
+        <td>
+          <b>{{ note.user.username|capfirst }} </b>
+          {{ note.datum }}
+          {% if note.attachment %}
+            <br>Attachment: <a href="{% static '' %}files/{{note.attachment.url}}">{{note.filename}}</a>
+          {% endif %}
+          <p style="font-size:10px; color=#eeeeee">{{ note.timestamp }}</p>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+<!-- END NOTES -->
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base_stage.html' %}
+
+{% block pre_form %}
+<h3>Complete the questionnaire below!</h3>
+{% endblock %}
+
+{% block form %}
+<div class="form-group">
+    <label>Your age: </label> <input class="form-contrl" type="number" name="age" />
+</div>
+<hr/>
+<div class="form-group">
+    <label>Your sex: </label> 
+    <div class="radiobox">
+        <input type="radio" name="sex" value="y">Female<br/>
+        <input type="radio" name="sex" value="n">Male<br/>
+        <input type="radio" name="sex" value="n">Undisclosed<br/>
+    </div>
+</div>
+<hr/>
+<div class="form-group">
+    <label>Handedness: </label>
+    <div class="radiobox">
+        <input type="radio" name="handedness" value="y">Left-handed<br/>
+        <input type="radio" name="handedness" value="n">Right-handed<br/>
+        <input type="radio" name="handedness" value="n">Ambidextrous<br/>
+    </div>
+</div>
+<hr/>
+<div class="form-group">
+    <label>Your primary device: </label>
+    <div class="radiobox">
+        <input type="radio" name="primary_device" value="desktop">Desktop/Non-Hybrid Laptop<br/>
+        <input type="radio" name="primary_device" value="tablet">Tablet<br/>
+        <input type="radio" name="primary_device" value="hybrid">Hybrid Device<br/>
+        <input type="radio" name="primary_device" value="smart_phone">Smart Phone<br/>
+        <input type="radio" name="primary_device" value="other">Other<br/>
+        <input type="radio" name="primary_device" value="none">None<br/>
+    </div>
+</div>
+<hr/>
+<div class="form-group">
+    <label>Your proficiency on the primary device: </label>
+    <div class="radiobox">
+        <input type="radio" name="proficiency" value="advanced">Advanced<br/>
+        <input type="radio" name="proficiency" value="average">Average<br/>
+        <input type="radio" name="proficiency" value="beginner">Beginner<br/>
+        <input type="radio" name="proficiency" value="none">No Proficiency<br/>
+    </div>
+</div>
+<hr/>
+<div class="form-group">
+    <label>Do you have a steady and reliable Internet connection?: </label>
+    <div class="radiobox">
+        <input type="radio" name="internet" value="stable">Yes<br/>
+        <input type="radio" name="internet" value="unstable">No<br/>
+    </div>
+</div>
+{% endblock %}

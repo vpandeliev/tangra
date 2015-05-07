@@ -1,0 +1,18 @@
+{% extends 'base_stage.html' %}
+
+{% block pre_form %}
+<h1>Week 2 Intervention</h1>
+
+<p>You may only advance the stage when one week has passed since you have
+completed the previous stage.</p>
+
+<p>If you find yourself cannot advance, please simply wait until then. You
+should be using InTouch as if you would use in your normal life. You may exit 
+this page and log out from Tangra and come back after when you are supposed to.
+</p>
+
+{% endblock %}
+
+{% block form %}
+	<input type="hidden" name="w1_done" value="e-signature" />
+{% endblock %}

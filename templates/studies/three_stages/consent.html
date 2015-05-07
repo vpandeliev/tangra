@@ -1,0 +1,22 @@
+{% extends 'base_stage.html' %}
+
+{% block pre_form %}
+<h1>Consent</h1>
+
+<h2>A Generic Three State Study</h2>
+
+<h3>Researcher: Lord Egerton Robbespierre, egertonr@tehlab.com</h3>
+
+<p>In this study the participants must fill out pointless electronic form
+that does not amount to anything.</p>
+
+<p>The study starts as soon as the participant consent and should take less
+than 5 minutes to complete.</p>
+
+<p>The act of clicking the button below is equivalent of signing and agreement to this consent form.</p>
+
+{% endblock %}
+
+{% block form %}
+	<input type="hidden" name="signature" value="e-signature" />
+{% endblock %}

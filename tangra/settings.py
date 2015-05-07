@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/files')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
@@ -42,6 +43,18 @@ STATICFILES_DIRS = (
 
 LOGIN_URL = '/admin'
 
+AUTH_USER_MODEL = 'custom_auth.User'
+
+# Email configuration
+EMAIL_BACKEND =         'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST =            'smtp.gmail.com'
+EMAIL_HOST_USER =       'taglab.developer@gmail.com'
+EMAIL_HOST_PASSWORD =   'T4GlabDev'
+EMAIL_SUBJECT_PREFIX =  '[Tangra] '
+EMAIL_PORT =            587
+EMAIL_USE_TLS =         True
+EMAIL_HOST_NAME =       'Admin'
+
 
 SUIT_CONFIG = {
     'ADMIN_NAME': 'Tangra',
@@ -50,13 +63,13 @@ SUIT_CONFIG = {
     'MENU': (
         # Reorder app models
         {
-        'app': 'studies', 
+        'app': 'studies',
         'models': (
             {'model':'auth.user', 'label':'Participants'},
-            {'model':'studies.study', 'label':'Studies'}, 
-            'group', 
+            {'model':'studies.study', 'label':'Studies'},
+            'group',
             'userstage'
-            ), 
+            ),
         'icon':'icon-leaf'
         },
         # Separator
@@ -78,8 +91,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'studies',
+    'custom_auth',
+
+    # These are for the public API
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -90,6 +107,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # These are for the public API
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 )
 
 ROOT_URLCONF = 'tangra.urls'
@@ -129,7 +150,23 @@ STATIC_URL = '/static/'
 # Setting for the public API.
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES' :(
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
     )
 }
+
+# Setting for CORS or the API won't work!
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_HEADERS = (
+    'x-requested-with',
+    'content-type',
+    'accept',
+    'origin',
+    'authorization',
+    'x-csrftoken'
+)

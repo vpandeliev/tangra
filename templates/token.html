@@ -1,0 +1,10 @@
+{% load staticfiles %}
+
+{% if user.is_authenticated %}
+    <h1>Token Access</h1>
+    <p>Warning: You should only access this when requested by the investigators.</p>
+    <p>Copy the token below and paste it in a Tangra program:</p>
+    <p>{{ token }}</p>
+{% else %}
+    <p>Unauthorized access.</p>
+{% endif %}

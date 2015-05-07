@@ -1,0 +1,11 @@
+{% extends 'base_stage.html' %}
+
+{% block pre_form %}
+<h1>Debrief</h1>
+<p>The study is done. Since the study is simple, this is it!</p>
+<p>The act of clicking the button below is equivalent of signing and agreeing to this debriefing form.</p>
+{% endblock %}
+
+{% block form %}
+<input type="hidden" name="signature" value="e-Signature" />
+{% endblock %}

@@ -6,10 +6,15 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib import auth
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+from rest_framework.authtoken.models import Token
+import json
 
+from rest_framework import authentication, permissions
 
 # Templates used
 TEMPLATE_LOGIN = "registration/login.html"
+TEMPLATE_TOKEN = "token.html"
 
 # Error messages for logging in
 ERROR_INVALID_CREDENTIALS = "Sorry, that is not a valid username or password."
@@ -43,8 +48,8 @@ def login(request):
 
 	elif request.method == 'POST':
 		# TODO: Error if request doesn't have these parameters
-		username = request.POST['username']
-		password = request.POST['password']
+		username = request.POST.get('username')
+		password = request.POST.get('password')
 		user = auth.authenticate(username=username, password=password)
 
 		if user is None:
@@ -76,3 +81,21 @@ def logout(request):
 	"""	Log the currently logged in user out of Tangra """
 	auth.logout(request)
  	return HttpResponseRedirect(reverse('home'))
+
+
+def get_token(request):
+	"""Obtain a token for a specific user. Required that the user to be 
+	logged in. If a user never has a token before, a new one will be
+	generated."""
+
+	if request.user.is_authenticated():
+		c = Token.objects.filter(user=request.user.id).count()
+
+		if c > 0:
+			t = Token.objects.get(user=request.user.id)
+		else:
+			t = Token.objects.create(user=request.user)
+		
+		return HttpResponse(json.dumps({"token":str(t)}))
+	else:
+		return HttpResponse(json.dumps({"token":""}))

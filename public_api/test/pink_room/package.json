@@ -1,0 +1,9 @@
+{
+	"name" : "tangra-test",
+	"window" : {
+		"width" : 800,
+		"height" : 600,
+		"toolbar" : false
+	},
+	"main" : "index.html"
+}

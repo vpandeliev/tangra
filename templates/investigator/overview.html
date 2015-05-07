@@ -1,0 +1,144 @@
+{% extends 'dashboard.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+  {% load staticfiles %}
+  <link href="{% static 'css/investigator/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block nav %}
+<ul class="nav nav-sidebar">
+  <li class="active"><a href="#">Overview</a></li>
+  <li><a href="{% url 'studies:investigator:details' study_id %}">Study Details</a></li>
+  <li><a href="{% url 'studies:investigator:email_all' study_id %}">Email participants</a></li>
+  <li><a href="{% url 'studies:investigator:view_data' study_id %}">View Data</a></li>
+  <li><a href="{% url 'studies:investigator:export' study_id %}">Export Data</a></li>
+</ul>
+{% endblock %}
+
+{% block page-title %}{{study.name}}: Overview{% endblock %}
+
+{% block page-content %}
+
+<!-- ANALYTIC VISUALIZATIONS -->
+<!-- COMMENTED OUT FOR DEMO: 
+<div class="row placeholders">
+  <div class="col-xs-6 col-sm-3 placeholder">
+    <img src="{% static 'img/blue-stat.png' %}" class="img-responsive">
+    <h4>All</h4>
+    <span class="text-muted">InTouch usage</span>
+  </div>
+  <div class="col-xs-6 col-sm-3 placeholder">
+    <img src="{% static 'img/green-stat.png' %}" class="img-responsive">
+    <h4>Kennedy</h4>
+    <span class="text-muted">InTouch usage</span>
+  </div>
+  <div class="col-xs-6 col-sm-3 placeholder">
+    <img src="{% static 'img/blue-stat.png' %}" class="img-responsive">
+    <h4>Kensington</h4>
+    <span class="text-muted">InTouch usage</span>
+  </div>
+  <div class="col-xs-6 col-sm-3 placeholder">
+    <img src="{% static 'img/green-stat.png' %}" class="img-responsive">
+    <h4>Leaside</h4>
+    <span class="text-muted">InTouch usage</span>
+  </div>
+</div>-->
+
+<!-- USER OVERVIEWS -->
+{% for group in groups %}
+<h2 class="sub-header">
+  {{group.name}}
+  <a href="{% url 'studies:investigator:email_group' study_id group.id %}">
+  <button type="button" class="btn btn-default" style="margin-right:10px; float:right">
+    <span class="glyphicon glyphicon-envelope"></span>
+    Email Group
+  </button>
+  </a>
+</h2>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Current Stage</th>
+        <th>Progress</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for participant in group.users.all %}
+      <tr>
+        <td>
+          <a href="{% url 'studies:investigator:user' study_id participant.id %}">
+            {{participant.username|capfirst}}
+          </a>
+        </td>
+        <td>{{participant.age}}</td>
+        <td>{{gender_choices|get_item:participant.gender}}</td>
+        <td>{{stage_names|get_item:participant.id}}</td>
+        <td>
+          <div class="progress" style="margin-bottom:0px">
+            <div  class="progress-bar progress-bar-success"
+                  role="progressbar"
+                  aria-valuenow="{{ progress|get_item:participant.id}}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  style="width: {{ progress|get_item:participant.id}}%">
+                  {{ progress|get_item:participant.id}}%
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<br>
+{% endfor %}
+
+<!-- NOTES -->
+<h2 class="sub-header">Notes</h2>
+<form enctype="multipart/form-data" action="{% url 'studies:investigator:note_study' study_id %}" method="post">
+  {% csrf_token %}
+  {{ note_form.datum }}
+  <br>
+  <table>
+    <tr>
+      <td width="70%">{{ note_form.attachment }}</td>
+      <td width="25%">{{ note_form.email }} Email investigators</td>
+      <td width="15%" align="right">
+        <button type="submit" class="btn btn-default" style="margin-right:10px">
+          <span class="glyphicon glyphicon-edit"></span> Add Note
+        </button>
+      </td>
+    </tr>
+  </table>
+  <br>
+</form>
+<br>
+{% if notes|length > 0 %}
+<div class="table-responsive">
+  <table class="table table-striped">
+    <tbody>
+      {% for note in notes %}
+      <tr>
+        <td>
+          <b>{{ note.user.username|capfirst }} </b>
+          {{ note.datum }}
+          {% if note.attachment %}
+            <br>Attachment: <a href="{% static '' %}files/{{note.attachment.url}}">{{note.filename}}</a>
+          {% endif %}
+          <p style="font-size:10px; color=#eeeeee">{{ note.timestamp }}</p>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+<!-- END NOTES -->
+
+{% endblock %}
